@@ -1,0 +1,31 @@
+<div class="mt-4">
+    <div class="container">
+        <div class="row">
+            <form method="get" action="/updateProfile">
+                {{#each user}}
+                <div class="form-row mb-2">
+                    <label for="name">Họ tên</label>
+                    <input type="text" name="name" id="full-name" class="input-text" value="{{this.TenKH}}"
+                        required>
+
+                </div>
+                <div class="form-row mb-2">
+                    Địa chỉ giao hàng
+                    <input type="text" name="address" id="your-address" class="input-text" name="address"
+                        value="{{this.DiaChi}}" required>
+                </div>
+                <div class="form-row mb-2">
+                    Số điện thoại
+                    <input type="text" name="phone" id="phone-number" class="input-text" required value="{{this.SDT}}"
+                         pattern="0[0-9]{9}">
+                </div>
+                {{/each}}
+
+                <div class="form-row-last mt-3">
+                    <input type="submit" name="register" class="register btn-primary" value="Cập nhật thông tin">
+
+            </form>
+            
+        </div>
+    </div>
+</div>

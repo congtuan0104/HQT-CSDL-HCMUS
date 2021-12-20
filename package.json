@@ -1,0 +1,21 @@
+{
+  "name": "hqt-csdl",
+  "version": "1.0.0",
+  "description": "Đồ án thực hành HQT CSDL",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "express-handlebars": "^6.0.2",
+    "express-session": "^1.17.2",
+    "msnodesqlv8": "^2.4.4",
+    "mssql": "^7.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

@@ -1,0 +1,73 @@
+<div class="mt-4">
+    <div class="container">
+        <div class="row">
+        </div>
+        <div class="row">
+            {{#each orders}}
+            <div class="col-sm-6 col-lg-4 mt-4">
+                {{#if this.MaNV}}
+                    <div class="card h-100 border-2 border-success">
+                    <div class="card-header">
+                         <h5><b>Mua tại cửa hàng</b></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-left">
+
+                            <div class="text-grey-m2">
+
+                                <div class="my-2"><i class="fa fa-circle text-success text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Mã số hoá đơn: </span> 000{{this.MaHD}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-success text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Ngày lập: </span> {{this.NgayLap}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-success text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Tình trạng: </span> <span
+                                        class="badge badge-warning badge-pill px-25">{{this.TinhTrang}}</span>   
+                                </div>
+                                <div class="my-2"><i class="fa fa-circle text-success text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Tổng tiền: </span> {{this.TongTien}}đ</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/my-orders/{{this.MaHD}}" class="btn btn-lg btn-success btn-block"
+                            role="button" aria-pressed="true">XEM CHI TIẾT</a>
+                    </div>
+                </div>
+                {{else}}
+                    <div class="card h-100 border-2 border-primary">
+                    <div class="card-header">
+                        <h5><b>Mua trực tuyến</b></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-left">
+
+                            <div class="text-grey-m2">
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Mã số hoá đơn: </span> 000{{this.MaHD}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Ngày đặt: </span> {{this.NgayLap}}</div>
+
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Tình trạng: </span> <span
+                                        class="badge badge-warning badge-pill px-25">{{this.TinhTrang}}</span>
+                                </div>
+                                <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                        class="text-600 text-90">Tổng tiền:  </span> {{this.TongTien}}đ</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/my-orders/{{this.MaHD}}" class="btn btn-lg btn-primary btn-block"
+                            role="button" aria-pressed="true">XEM CHI TIẾT</a>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

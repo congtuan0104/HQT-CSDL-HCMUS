@@ -1,0 +1,113 @@
+<div class="mt-4">
+    <div class="container-fluid">
+        {{#if user}}
+        <div class="card">
+            <div class="row">
+                <div class="col-md-8 cart" style="border: 2px solid rgb(255, 136, 0); border-radius: 15px 0 0 15px">
+                    <div class="title pt-2">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h4><b>Giỏ hàng</b></h4>
+                            </div>
+                            <div class="col align-self-center text-right text-muted">{{this.numberOfProduct}} sản phẩm
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row border-top border-bottom">
+                        <div class="row main align-items-center">
+                            <div class="col-2">#</div>
+                            <div class="col">
+                                <div class="row">Sản phẩm</div>
+                            </div>
+                            
+                            <div class="col"> Giá bán</div>
+                            <div class="col"> Giảm </div>
+                            <div class="col-2"> Số lượng</div>
+                            <div class="col"> Thành tiền </div>
+                             <span class="close">----</span>
+                        </div>
+                    </div>
+                    {{#if products}}
+                    {{#each products}}
+                    <div class="row border-top border-bottom">
+                        <div class="row main align-items-center">
+                            <div class="col-2"><img class="img-fluid" src="/img/product-mix3.png"></div>
+                            <div class="col">
+                                <div class="row text-muted">MSP: {{this.productID}}</div>
+                                <div class="row">{{this.productName}} </div>
+                            </div>
+                            <div class="col"> {{this.cost}}</div>
+                            <div class="col">{{this.discount}}</div>
+                            <div class="col-2"> <input class="w-75" type="number" min="1" name="quantity" value="{{this.quantity}}"></div>
+                            <div class="col">{{this.total}}</div>
+                            
+                            <span class="close">
+                                    <a style="text-decoration:none"
+                                        href="/removeFromCart?productID={{this.productID}}">&#10005;</a>
+                                </span>
+                        </div>
+                    </div>
+                    {{/each}}
+                    {{/if}}
+
+
+                    <div class="back-to-shop"><a style="text-decoration:none" href="/">&leftarrow; Tiếp tục mua sắm</a><span
+                            class="text-muted"></span>
+                    </div>
+                </div>
+                <div class="col-md-4 summary">
+                    <div>
+                        <h5><b>Thông tin giao hàng</b></h5>
+                    </div>
+                    <form method="post" action="/addToOrder">
+                        {{#each user}}
+                        <div class="form-row mb-2">
+                            Họ tên
+                            <input type="text" name="name" disabled id="full-name" class="input-text"
+                                value="{{this.TenKH}}" required>
+
+                        </div>
+                        <div class="form-row mb-2">
+                            Địa chỉ giao hàng
+                            <input type="text" name="address" id="your-address" class="input-text" name="address"
+                                value="{{this.DiaChi}}" required>
+                        </div>
+                        <div class="form-row mb-2">
+                            Số điện thoại
+                            <input type="text" name="phone" id="phone-number" class="input-text" required
+                                value="{{this.SDT}}" disabled pattern="0[0-9]{9}">
+                        </div>
+                        {{/each}}
+                        <div class="form-row mb-2">
+
+                            <label for="age">Hình thức nhận hàng</label>
+                            <select class="custom-select" id="inputGroupSelect01">
+                                <option selected value="1">Giao hàng thường</option>
+                                <option value="2">Giao hàng nhanh</option>
+                                <option value="3">Giao hàng siêu tốc</option>
+                            </select>
+                        </div>
+                        <div class="form-row mt-3">
+                            <b class="text-danger">Đặc biệt ưu đãi: </b> Miễn phí vận chuyển
+                        </div>
+                        <div class="form-row mt-3 text-primary">
+                            <h4>Tổng tiền: {{#with grandTotal}} {{this}} {{/with}}</h4>đ
+                        </div>
+                        <div class="form-row-last mt-3">
+                            <input type="submit" name="register" class="register btn-primary" value="Xác nhận mua hàng">
+                            
+                    </form>
+                    
+                    <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <br><br><br><br><br>
+            <h1>BẠN PHẢI <a href="/sign-in">ĐĂNG NHẬP</a> ĐỂ THẤY GIỎ HÀNG</h1>
+            {{/if}}
+
+        </div>
+    </div>

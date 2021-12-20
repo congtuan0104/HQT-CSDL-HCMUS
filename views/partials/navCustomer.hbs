@@ -1,0 +1,52 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md bg-white navbar-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/" style="color: #CF111A;"><b>ConCung</b>.com</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <form action="/search" method="get" class="form-inline ml-auto my-2 my-lg-0 mr-3">
+                <div class="input-group" style="width: 520px;">
+                    <input type="text" class="form-control" aria-label="Small"
+                        name="q" placeholder="Nhập sản phẩm cần tìm kiếm...">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn" style="background-color: #CF111A; color: white;">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <ul class="navbar-nav mb-1 ml-auto">
+                {{#each user}}
+                <div class="dropdown">
+                    <li class="nav-item account" type="button" class="btn dropdown" data-toggle="dropdown">
+                        <a href="#" class="btn btn-secondary rounded-circle">
+                            <i class="fa fa-user"></i>
+                        </a>
+                        <a class="nav-link text-dark text-uppercase" href="#" style="display:inline-block">
+                            {{this.TenKH}}
+                        </a>
+                    </li>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item nutdangky text-center mb-2" href="/profile">Thông tin tài khoản</a>
+                        <a class="dropdown-item nutdangnhap text-center mb-2" href="/history">Lịch sử mua sắm</a>
+                        <a class="dropdown-item nutdangnhap text-center mb-2" href="/my-orders">Đơn hàng</a>
+                        <a class="dropdown-item nutdangnhap text-center" style="background-color: #cf2711;" href="/log-out">Đăng xuất</a>
+                    </div>
+                </div>
+                {{/each}}
+                <li class="nav-item giohang">
+                    <a href="/cart" class="btn btn-secondary rounded-circle">
+                        <i class="fa fa-shopping-cart"></i>
+                        <div class="cart-amount">{{this.numberOfProduct}}</div>
+                    </a>
+                    <a class="nav-link text-dark giohang text-uppercase" href="/cart" style="display:inline-block">Giỏ
+                        Hàng</a>
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+</nav>

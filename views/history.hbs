@@ -1,0 +1,28 @@
+
+<div class="mt-4">
+    <div class="container">
+        <h1>SẢN PHẨM MÀ BẠN ĐÃ MUA</h1>
+        <div class="row">
+            {{#each products}}
+            <div class="col-sm-6 col-lg-3 mt-4">
+                <div class="card h-100 border-2 border-danger">
+                    <a href="/products/{{this.MaSP}}">
+                        <img src="/img/product-mix3.png" class="card-img-top" alt="Hình minh hoạ">
+                    </a>
+                    <div class="card-body">
+                        <a class="text-decoration-none" href="/products/{{this.MaSP}}">
+                            <h5 class="card-title text-left text-primary">{{this.TenSP}}</h5>
+                        </a>
+
+                        <h6 class="card-text text-left text-danger "><b class="money">{{this.GiaBan}}đ</b></h6>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/addToCart?productID={{this.MaSP}}&q=1" class="btn btn-lg btn-warning btn-block" 
+                        role="button" aria-pressed="true">MUA LẦN NỮA</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

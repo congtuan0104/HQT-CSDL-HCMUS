@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {{>(cssP)}}
+    <style>
+        .card,
+        .card img {
+            border-radius: 15px;
+        }
+
+
+        .card-body {
+            padding-bottom: 3px;
+            padding-top: 5px;
+        }
+
+        .card-footer {
+            padding: 0;
+        }
+
+        .card-footer .btn {
+            border-radius: 15px;
+            padding: 5px 0;
+            font-size: 15px;
+        }
+    </style>
+    
+
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md">
+                {{>(navP)}}
+            </div>
+        </div>
+
+        <div class="row py-2">
+            <div class="col-md-12 text-center" style="min-height:400px;">
+                {{{body}}}
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md">
+                {{>(footerP)}}
+            </div>
+        </div>
+
+    </div>
+
+    {{>(scriptP)}}
+    
+</body>
+
+</html>

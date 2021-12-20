@@ -1,0 +1,242 @@
+<div class="container">
+    <div class="row">
+        <section class="product-page mb-4">
+            <div class="container">
+                <!-- chi tiết 1 sản phẩm -->
+                <div class="product-detail bg-white p-4">
+                    <div class="row">
+                        <!-- ảnh  -->
+                        <div class="col-md-5 khoianh">
+                            <div class="anhto mb-4">
+
+                                <img class="product-image" src="/img/product-mix3.png" alt="ma-bun-luu-manh-mt"
+                                    style="width: 100%;">
+
+                            </div>
+
+                        </div>
+                        <!-- thông tin sản phẩm: tên, giá bìa giá bán tiết kiệm, các khuyến mãi, nút chọn mua.... -->
+                        <div class="col-md-7 khoithongtin">
+                            <div class="row">
+                                <div class="col-md-12 mb-4 header text-left"
+                                    style="border-bottom: 1px solid rgba(110, 117, 241, 0.347)">
+                                    {{#each product}}
+                                    <h2 class="ten"><b>{{this.TenSP}}</b></h2>
+                                    {{/each}}
+                                </div>
+
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        {{#each product}}
+                                        <div class="col-4 text-left">
+                                            <h5>Giá bán: </h5>
+                                        </div>
+                                        <div class="col-8 text-left text-danger">
+                                            <h3><b>{{this.GiaBan}}</b>đ</h3>
+                                        </div>
+                                        {{/each}}
+                                    </div>
+                                    {{#if discount}}
+                                    {{#each discount}}
+                                    <div class="row">
+                                        <div class="col-5 text-left">
+                                            <small>Ưu đãi giảm </small>
+                                        </div>
+                                        <div class="col-7 text-left text-primary">
+                                            <h4><b>
+                                                    {{this.Giam}}
+                                                </b>đ</h4>
+                                        </div>
+
+                                    </div>
+                                    <div class="row text-left">
+                                        <div class="col">
+                                            <small>Ưu đãi từ ngày {{this.NgayBatDau}} đến {{this.NgayKetThuc}}</small>
+                                        </div>
+                                    </div>
+
+                                    {{/each}}
+                                    {{/if}}
+                                    <div class="uudai my-4 text-left">
+                                        <h6 class="header font-weight-bold">Khuyến mãi & Ưu đãi tại ConCung</h6>
+                                        <ul>
+                                            <li><b>Miễn phí giao hàng </b>cho đơn hàng thanh toán trực tiếp tại cửa
+                                                hàng</li>
+                                            <li><b>Combo đồ chơi siêu nhân GIẢM 25% </b></li>
+                                            <li><b>Tặng phiếu giảm giá</b> cho mỗi đơn hàng trên 500.000đ</li>
+                                            <li><b>Tặng 1 quyển truyện tranh miễn phí </b></li>
+                                        </ul>
+                                    </div>
+                                    {{#each product}}
+                                    <form method="get" action="/addToCart">
+
+                                        <div class="soluong d-flex">
+
+                                            <label class="font-weight-bold">Số lượng: </label>
+                                            <div class="input-number input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text btn-spin btn-dec">-</span>
+                                                </div>
+
+                                                <input type="text" name="q" value="1" class="soluongsp  text-center">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text btn-spin btn-inc">+</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <input type="hidden" name="productID" value="{{this.MaSP}}">
+                                        <button type="submit" class="nutmua btn w-100 text-uppercase">THÊM VÀO GIỎ
+                                            HÀNG</button>
+
+                                </div>
+
+                                </form>
+                                {{/each}}
+                                <div class="col-md-5">
+                                    <div class="thongtinsach text-left">
+                                        <ul>
+                                            {{#each product}}
+                                            <li>Mã số sản phẩm: <b>{{this.MaSP}}</b></li>
+                                            <li>Loại sản phẩm:
+                                                <a href="/product-type/{{this.TenLoai}}"
+                                                    class="tacgia">{{this.TenLoai}}</a>
+                                            </li>
+                                            <li>Thương hiệu:
+                                                <a href="/thuong-hieu/{{this.TenThuongHieu}}"
+                                                    class="tacgia">{{this.TenThuongHieu}}</a>
+                                            </li>
+                                            <li>Hạn sử dụng: <b>{{this.HanSuDung}}</b> tháng</li>
+                                            <li>Còn lại: <b>{{this.TongSoLuongTon}}</b> sản phẩm</li>
+                                            {{/each}}
+                                        </ul>
+                                    </div>
+
+                                    <div class="thongtinsach text-center mt-4">
+                                        <img class="w-100" src="/img/giay-chung-nhan.bmp" alt="">
+                                    </div>
+                                    <div class="thongtinsach text-center mt-4">
+                                        <img class="w-100" src="/img/c9rd5i10.bmp" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- decripstion của 1 sản phẩm: giới thiệu , đánh giá độc giả  -->
+                        <div class="product-description col-md-9 text-left">
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active text-uppercase" id="nav-gioithieu-tab"
+                                        data-toggle="tab" href="#nav-gioithieu" role="tab" aria-controls="nav-gioithieu"
+                                        aria-selected="true">Giới thiệu</a>
+                                    <a class="nav-item nav-link text-uppercase" id="nav-danhgia-tab" data-toggle="tab"
+                                        href="#nav-danhgia" role="tab" aria-controls="nav-danhgia"
+                                        aria-selected="false">Đánh giá của khách hàng</a>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active ml-3" id="nav-gioithieu" role="tabpanel"
+                                    aria-labelledby="nav-gioithieu-tab">
+                                    <h6 class="tieude font-weight-bold">CHƯA CÓ MÔ TẢ SẢN PHẨM</h6>
+                                </div>
+                                <div class="tab-pane fade" id="nav-danhgia" role="tabpanel"
+                                    aria-labelledby="nav-danhgia-tab">
+                                    <div class="row">
+                                        <div class="col-md-3 text-center">
+                                            <p class="tieude">Đánh giá trung bình</p>
+                                            <div class="diem">0/5</div>
+                                            <div class="sao">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <p class="sonhanxet text-muted">(0 nhận xét)</p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="tiledanhgia text-center">
+                                                <div class="motthanh d-flex align-items-center">5 <i
+                                                        class="fa fa-star"></i>
+                                                    <div class="progress mx-2">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div> 0%
+                                                </div>
+                                                <div class="motthanh d-flex align-items-center">4 <i
+                                                        class="fa fa-star"></i>
+                                                    <div class="progress mx-2">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div> 0%
+                                                </div>
+                                                <div class="motthanh d-flex align-items-center">3 <i
+                                                        class="fa fa-star"></i>
+                                                    <div class="progress mx-2">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div> 0%
+                                                </div>
+                                                <div class="motthanh d-flex align-items-center">2 <i
+                                                        class="fa fa-star"></i>
+                                                    <div class="progress mx-2">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div> 0%
+                                                </div>
+                                                <div class="motthanh d-flex align-items-center">1 <i
+                                                        class="fa fa-star"></i>
+                                                    <div class="progress mx-2">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div> 0%
+                                                </div>
+                                                <div class="btn vietdanhgia mt-3">Viết đánh giá của bạn</div>
+                                            </div>
+                                            <!-- nội dung của form đánh giá  -->
+                                            <div class="formdanhgia">
+                                                <h6 class="tieude text-uppercase">GỬI ĐÁNH GIÁ CỦA BẠN</h6>
+                                                <span class="danhgiacuaban">Đánh giá của bạn về sản phẩm này:</span>
+                                                <div
+                                                    class="rating d-flex flex-row-reverse align-items-center justify-content-end">
+                                                    <input type="radio" name="star" id="star1"><label
+                                                        for="star1"></label>
+                                                    <input type="radio" name="star" id="star2"><label
+                                                        for="star2"></label>
+                                                    <input type="radio" name="star" id="star3"><label
+                                                        for="star3"></label>
+                                                    <input type="radio" name="star" id="star4"><label
+                                                        for="star4"></label>
+                                                    <input type="radio" name="star" id="star5"><label
+                                                        for="star5"></label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="txtFullname w-100"
+                                                        placeholder="Mời bạn nhập tên(Bắt buộc)">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="txtEmail w-100"
+                                                        placeholder="Mời bạn nhập email(Bắt buộc)">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="txtComment w-100"
+                                                        placeholder="Đánh giá của bạn về sản phẩm này">
+                                                </div>
+                                                <div class="btn nutguibl">Gửi bình luận</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

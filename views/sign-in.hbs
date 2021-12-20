@@ -1,0 +1,73 @@
+<div class="mt-1">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="page-content" >
+                
+                <div class="card signup_v4 mb-30" style="margin-bottom:70px;margin-top:70px;">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation"> <a class="nav-link active" id="login-tab"
+                                    data-toggle="tab" href="#login" role="tab" aria-controls="login"
+                                    aria-selected="true">Khách hàng</a> </li>
+                            <li class="nav-item" role="presentation"> <a class="nav-link" id="register-tab"
+                                    data-toggle="tab" href="#register" role="tab" aria-controls="register"
+                                    aria-selected="false">Quản lý</a> </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="login" role="tabpanel"
+                                aria-labelledby="login-tab">
+                                <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;">ĐĂNG NHẬP</h4>
+                                <form method="post" action="/verifyCustomer">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+
+                                            <input type="text" class="form-control" name="phone" id="phone-number"
+                                                class="input-text" placeholder="Số điện thoại bố/mẹ" required
+                                                pattern="0[0-9]{9}">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <div class="justify-content-between align-items-center">
+
+                                                <div>Chưa có tài khoản? <a href="/sign-up">Đăng ký</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-3"> <button class="btn btn-primary full-width"
+                                            type="submit">Tiếp tục >></button> </div>
+                                </form>
+                                
+                            </div>
+                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                                <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;">ĐĂNG NHẬP</h4>
+                                <form method="post" action="/verifyStaff">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+
+                                            <input type="text" class="form-control" name="phone" id="phone-number"
+                                                class="input-text" placeholder="Số điện thoại nhân viên quản lý" required
+                                                pattern="0[0-9]{9}">
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <div class="justify-content-between align-items-center">
+
+                                                <div>Không đăng nhập được? <a href="#">Hỗ trợ</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-3"> <button class="btn btn-primary full-width"
+                                            type="submit">Vào trang quản lý >></button> 
+                                            </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

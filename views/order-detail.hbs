@@ -1,0 +1,133 @@
+<div class="page-content container">
+    <div class="container">
+        <div class="row mt-4" style="border: 3px solid rgb(200, 200, 243);
+             border-radius:25px; padding-top:20px;">
+            <div class="col-12 col-lg-10 offset-lg-1">
+                <div class="row text-center mt-2 mb-3 text-primary" style="border-bottom: 1px solid rgb(139, 139, 252)">
+                    <div class="col border-bottom-2">
+                        <h2><b>HOÁ ĐƠN</b></h2>
+                    </div>
+                    
+                </div>
+
+                <div class="row text-left">
+                    <div class="col-sm-6">
+
+                        <div class="text-grey-m2">
+                            {{#each user}}
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Người nhận: </span> {{this.TenKH}}</div>
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Số điện thoại: </span> {{this.SDT}}</div>
+                            {{/each}}
+                            {{#each orderDetail}}
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Địa chỉ: </span> {{this.DiaChiNhanHang}}</div>
+                            {{/each}}
+                        </div>
+
+                    </div>
+                    <!-- /.col -->
+
+                    <div class="text-95 col-sm-6 align-self-start d-sm-flex justify-content-end">
+
+                        <div class="text-grey-m2">
+                            {{#each orderDetail}}
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Mã số hoá đơn: </span> {{this.MaHD}}</div>
+
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Ngày lập</span> {{this.NgayLap}}</div>
+
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Tình trạng</span> <span
+                                    class="badge badge-warning badge-pill px-25">{{this.TinhTrang}}</span></div>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+                <div class="mt-4">
+                    <div class="row text-600 text-white bgc-default-tp1 py-25">
+                        <div class="d-none d-sm-block col-1">#</div>
+                        <div class="col-3 text-left">Sản phẩm</div>
+                        <div class="col-2">Số lượng</div>
+                        <div class="col-2">Giá bán</div>
+                        <div class="col-2">Giảm</div>
+                        <div class="col-2">Thành tiền</div>
+                    </div>
+                    {{#each orderList}}
+                    <div class="text-95 text-secondary-d3">
+                        <div class="row mb-2 mb-sm-0 py-25">
+                            <div class="d-none d-sm-block col-1">{{@index}}</div>
+                            <div class="col-3 text-left">{{this.TenSP}}</div>
+                            <div class="col-2">{{this.SoLuong}}</div>
+                            <div class="col-2">{{this.GiaBan}}đ</div>
+                            <div class="col-2">{{this.GiaGiam}}đ</div>
+                            <div class="col-2 text-secondary-d2">{{this.ThanhTien}}đ</div>
+                        </div>
+                    </div>
+                    {{/each}}
+
+
+
+                    <div class="row mt-1">
+                        <div class="col-12 col-sm-7 text-danger text-left mt-4">
+
+                            <h6>Lưu ý: </h6>
+                            <small>(*) Chỉ có thể huỷ đơn hàng chưa được gửi đi</small><br>
+                            <small>(**) Vui lòng xác nhận sau khi nhận hàng</small>
+
+                        </div>
+
+                        <div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
+
+                            <div class="row my-2 align-items-center bgc-primary-l3 p-2">
+                                <div class="col-7 text-right">
+                                    Tổng tiền
+                                </div>
+                                <div class="col-5">
+                                    {{#each orderDetail}}
+                                    <b class="text-150 text-danger">{{this.TongTien}}đ</b>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            {{#eq status 1}}
+                            {{#each orderDetail}}
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <a href="/confirmOrder?{{this.MaHD}}" class="btn btn-lg btn-success btn-block"
+                                        role="button" aria-pressed="true">XÁC NHẬN</a>
+                                </div>
+                                <div class="col">
+                                    <input disabled class="btn btn-lg btn-secondary btn-block" aria-pressed="true"
+                                        value="HUỶ ĐƠN"></input>
+                                </div>
+                            </div>
+                            {{/each}}
+                            {{/eq}}
+                            {{#eq status 0}}
+                            {{#each orderDetail}}
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <input disabled class="btn btn-lg btn-secondary btn-block" aria-pressed="true"
+                                        value="XÁC NHẬN"></input>
+                                </div>
+                                <div class="col">
+                                    <a href="/cancelOrder?{{this.MaHD}}" class="btn btn-lg btn-danger btn-block"
+                                        role="button" aria-pressed="true">HUỶ ĐƠN</a>
+                                </div>
+
+                            </div>
+                            {{/each}}
+                            {{/eq}}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
