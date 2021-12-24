@@ -1,27 +1,64 @@
 
 <div class="mt-4">
     <div class="container">
+        {{#if stores}}
+        <h1> ĐẠI LÝ</h1>
         <div class="row">
-            {{#each products}}
-            <div class="col-sm-6 col-lg-3 mt-4">
-                <div class="card h-100 border-2 border-danger">
-                    <a href="/products/{{this.MaSP}}">
-                        <img src="/img/product-mix3.png" class="card-img-top" alt="Hình minh hoạ">
+
+            {{#each stores}}
+            <div class="col-sm-6 col-lg-3 mb-4" style="padding: 0;">
+                <div class="card h-100 " style="border: 2px solid #ff6600; border-radius:0">
+                    <a href="/store/{{this.MaDL}}">
+                        <img src="/img/bhqgz3fk.bmp" class="card-img-top" alt="Hình minh hoạ">
                     </a>
                     <div class="card-body">
-                        <a class="text-decoration-none" href="/products/{{this.MaSP}}">
-                            <h5 class="card-title text-left text-primary">{{this.TenSP}}</h5>
+                        <a class="text-decoration-none text-uppercase" href="/store/{{this.MaDL}}">
+                            <h5 class="card-title text-primary">{{this.TenDL}}</h5>
                         </a>
-
-                        <h6 class="card-text text-left text-danger "><b class="money">{{this.GiaBan}}đ</b></h6>
+                    
+                            <small class="card-title">{{this.DiaChiKinhDoanh}}</small>
+                       
+                        
                     </div>
-                    <div class="card-footer">
-                        <a href="/addToCart?productID={{this.MaSP}}&q=1" class="btn btn-lg btn-danger btn-block" role="button" aria-pressed="true">CHỌN
-                            MUA</a>
-                    </div>
+                    
                 </div>
             </div>
             {{/each}}
         </div>
+        {{/if}}
+
+        {{#if products}}
+        <h1>SẢN PHẨM</h1>
+        <div class="row">
+            
+            {{#each products}}
+            <div class="col-sm-6 col-lg-3 mb-4" style="padding: 0;">
+                <div class="card h-100 " style="border: 2px solid #ff6600; border-radius:0">
+                    <a href="/store/{{this.MaDL}}?productID={{this.MaSP}}">
+                        <img src="/img/iphone.png" class="card-img-top" alt="Hình minh hoạ">
+                    </a>
+                    <div class="card-body">
+                        <a class="text-decoration-none" href="/store/{{this.MaDL}}?productID={{this.MaSP}}">
+                            <h5 class="card-title text-uppercase text-primary">{{this.TenSP}}</h5>
+                        </a>
+                        <a class="text-decoration-none" href="/store/{{this.MaDL}}">
+                            <h6 class="card-title text-dark text-uppercase">{{this.TenDL}}</h6>
+                        </a>
+                        
+                    </div>
+                    <div class="card-footer">
+                        <div class="row px-4">
+                            <div class="col">
+                                <h5 class="card-text text-left text-danger"><b class="money">{{this.GiaBan}}$</b></h6>
+                            </div>
+                            <div class="col">Đã bán {{this.DaBan}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            
+        </div>
+        {{/if}}
     </div>
 </div>

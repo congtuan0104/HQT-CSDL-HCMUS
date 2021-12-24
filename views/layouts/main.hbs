@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {{>(cssP)}}
     <style>
-        .card,
+
         .card img {
-            border-radius: 15px;
+            margin: 1px;
+            border-bottom: 2px solid #ff660051;
         }
 
 
@@ -26,9 +27,14 @@
         }
 
         .card-footer .btn {
-            border-radius: 15px;
+            background-color: #ff6600;
+            color: white;
+            border-radius: 0;
             padding: 5px 0;
             font-size: 15px;
+        }
+        .card-footer .btn:hover{
+            background-color: rgb(255, 0, 0);
         }
     </style>
     
@@ -38,13 +44,13 @@
 <body>
     <div class="container-fluid">
 
-        <div class="row">
+        <div class="row" style="background-color: #ff6600;">
             <div class="col-md">
                 {{>(navP)}}
             </div>
         </div>
 
-        <div class="row py-2">
+        <div class="row py-2" id="topPage"  style="background-color:rgb(240, 231, 219)">
             <div class="col-md-12 text-center" style="min-height:400px;">
                 {{{body}}}
             </div>

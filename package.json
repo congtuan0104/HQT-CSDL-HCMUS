@@ -6,9 +6,18 @@
   "scripts": {
     "start": "nodemon server.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/congtuan0104/HQT-CSDL-HCMUS.git"
+  },
+  "author": "Nhóm 3",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/congtuan0104/HQT-CSDL-HCMUS/issues"
+  },
+  "homepage": "https://github.com/congtuan0104/HQT-CSDL-HCMUS#readme",
   "dependencies": {
+    "co": "^4.6.0",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "express-session": "^1.17.2",

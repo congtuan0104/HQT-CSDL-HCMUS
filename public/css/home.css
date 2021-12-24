@@ -7,7 +7,15 @@
 
 /* css cho navbar  */
 body,html{
-    background-color: #F8F9FA;
+    background-color: #faf9f8;
+}
+
+.border-2{
+    border: 2px solid;
+}
+
+.nav{
+    background-color: #ff6600;
 }
 
 .navbar-nav li .nav-link{
@@ -16,17 +24,13 @@ body,html{
    font-weight: 400;
 }
 
-.navbar input.form-control {
-    border: 2px solid #CF111A!important;
-    
-}
-
 li.nav-item a{
     transition: 0.2s;
+
 }
 
 li.nav-item:hover a {
-    color: #F5A623!important;
+    color: #ff0000!important;
 }
 
 a.nav-link {
@@ -56,8 +60,9 @@ i.fa.fa-shopping-cart {
 a.btn.btn-secondary.rounded-circle {
     width: 42px;
     height: 40px;
-    background-color: #dfdfdf;
-    border: #cacaca;
+    background-color: #ffffff;
+    color: rgba(0, 0, 0, 0.792);
+    border: #ffffff;
 }
 
 .cart-amount{
@@ -347,7 +352,7 @@ label.error {
 
 ul i.fa.fa-chevron-right{
     font-size: 10px;
-    color: #d1d1d1;
+    color: white;
     line-height: 35px;
     padding-right: 20px;
 }

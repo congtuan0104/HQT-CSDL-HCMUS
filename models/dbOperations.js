@@ -1,10 +1,19 @@
 var config = require('./dbConfig');
 const sql = require('mssql/msnodesqlv8');
+const isolation = require('mssql/lib/isolationlevel');
+const res = require('express/lib/response');
+const { request } = require('express');
+const { READ_UNCOMMITTED } = require('mssql/lib/isolationlevel');
 
-async function get10Products() {
+
+async function getProductsList() {
     try {
         let pool = await sql.connect(config);
-        let products = await pool.request().query("SELECT * from SANPHAM");
+        let products = await pool.request().query(
+            "SELECT s.MaSP,TenSP, d.MaDL, TenDL, GiaBan, SUM(SLBan) as DaBan"
+            + " from SANPHAM s,CHINHANH_SANPHAM cs, DAILY d"
+            + " where s.MaSP=cs.MaSP and cs.MaDL = d.MaDL"
+            + " GROUP by s.masp,tensp, d.MaDL,TenDL, GiaBan");
         return products.recordset;
     }
     catch (error) {
@@ -12,12 +21,56 @@ async function get10Products() {
     }
 }
 
-async function getProduct(productID) {
+async function getStoreList() {
+    try {
+        let pool = await sql.connect(config);
+        let stores = await pool.request().query("SELECT * from DAILY");
+        return stores.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function getStoreDetail(storeID) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('storeID', sql.Int, storeID)
+            .query("SET TRAN ISOLATION LEVEL READ UNCOMMITTED SELECT * from DAILY d with(nolock) where d.MaDL=@storeID");
+        return store.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function getProductOfStore(storeID) {
+    try {
+        let pool = await sql.connect(config);
+        let products = await pool.request()
+            .input('storeID', sql.Int, storeID)
+            .query("SET TRAN ISOLATION LEVEL READ UNCOMMITTED SELECT s.MaSP,MaDL,GiaBan,TenSP,ThuongHieu, sum(slton) as TongSLTon, sum(slban) as DaBan"
+                + " from CHINHANH_SANPHAM cs with(nolock), SANPHAM s"
+                + " where cs.MaDL=@storeID AND s.MaSP=cs.MaSP"
+                + " group by s.MaSP,MaDL,GiaBan,TenSP,ThuongHieu");
+        return products.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function getProductDetail(storeID, productID) {
     try {
         let pool = await sql.connect(config);
         let product = await pool.request()
-            .input('input_parameter', sql.Int, productID)
-            .query("SELECT * from SANPHAM where MASP = @input_parameter");
+            .input('storeID', sql.Int, storeID)
+            .input('productID', sql.Int, productID)
+            .query("SET TRAN ISOLATION LEVEL READ UNCOMMITTED SELECT s.MaSP,MaDL,GiaBan,TenSP,ThuongHieu, TenLoaiSP, sum(slton) as TongSLTon, sum(slban) as DaBan"
+                + " from CHINHANH_SANPHAM cs WITH(NOLOCK), SANPHAM s, LOAISP LSP"
+                + " where cs.MaDL=@storeID AND s.MaSP=cs.MaSP AND s.MaSP=@productID AND LSP.MaLoaiSP=s.MaLoaiSP"
+                + " group by s.MaSP,MaDL,GiaBan,TenSP,ThuongHieu,TenLoaiSP");
         return product.recordset;
     }
     catch (error) {
@@ -25,93 +78,116 @@ async function getProduct(productID) {
     }
 }
 
-async function getDiscount(productID) {
+async function getBranchHaveProduct(storeID, productID) {
     try {
         let pool = await sql.connect(config);
-        let discount = await pool.request()
-            .input('input_parameter', sql.Int, productID)
-            .query("SELECT convert(varchar(10), d.NgayBatDau, 105) AS NgayBatDau,"
-                + " convert(varchar(10), d.NgayKetThuc, 105) AS NgayKetThuc, Giam"
-                + " from DOTGIAMGIA d, CT_DOTGIAMGIA ct"
-                + " where MASP = @input_parameter AND d.NgayBatDau = ct.NgayBatDau AND d.NgayKetThuc=ct.NgayKetThuc"
-                + " AND datediff(minute,getdate() - 1, d.NgayKetThuc) >= 0"
-                + " AND datediff(minute,getdate() - 1, d.NgayBatDau) <= 0");
-        if (discount.recordset.length == 0) return null;
-        return discount.recordset;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function getProductDetail(productID) {
-    try {
-        let pool = await sql.connect(config);
+        let res;
         let product = await pool.request()
-            .input('input_parameter', sql.Int, productID)
-            .query("SELECT SP.MaSP,TenSP,TenLoai,HanSuDung,GiaBan,TenThuongHieu,TongSoLuongTon"
-                + " FROM SANPHAM SP,LOAISANPHAM LSP, THUONGHIEU TH"
-                + " WHERE SP.MASP = @input_parameter AND SP.MaLoai = LSP.MaLoai AND TH.MaThuongHieu=SP.MaThuongHieu");
+            .input('masp', sql.Int, productID)
+            .input('madl', sql.Int, storeID)
+            //     .execute('sp_XEM_THONG_TIN_SAN_PHAM')
+            //     .then((result) => {
+            //         res = result.recordset;
+            //     })
+            //return res;
+            .query("SET TRAN ISOLATION LEVEL READ UNCOMMITTED SELECT MaSP, c.MaDL, c.STT, DiaChi, SLTon"
+                + " from CHINHANH_SANPHAM cs with(nolock), CHINHANH c with(nolock)"
+                + " where cs.MaDL=@madl AND cs.MaSP=@masp AND"
+                + " c.MaDL=cs.MaDL AND c.STT=cs.STT");
         return product.recordset;
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
+        return null;
     }
 }
 
-// const table = new sql.Table('KHACHHANG'); // or temporary table, e.g. #temptable
-// table.create = false;
-// table.rows.add('KH1000',name, address,phone,email);
 
-// const request = new sql.Request()
-// request.bulk(table, (err, result) => {
-//     err => console.log(err);
-//     result => console.log("Thêm khách hàng thành công");
-// })
 
-async function addNewUser(name, address, phone) {
-    try {
-        let pool = await sql.connect(config);
-        const request = await pool.request();
-        request.input('TenKH', sql.NVarChar(50), name);
-        request.input('DiaCHi', sql.NVarChar(200), address);
-        request.input('SDT', sql.Char(10), phone);
-        try {
-            await request.query("insert into KHACHHANG (TenKH,DiaChi,SDT) values (@TenKH,@DiaChi,@SDT)");
-            console.log('Đăng ký thành công');
-            return 1;
-        } catch (error) {
-            console.log(error);
-            return 0;
+async function getBranchHaveProduct2(storeID, productID) {
+    let res;
+    let finalRes;
+    let pool = await sql.connect(config);
+    let transaction = new sql.Transaction(pool);
+    transaction.isolationLevel = sql.ISOLATION_LEVEL.READ_UNCOMMITTED;
+
+    await transaction.begin(async err => {
+        if (err) {
+            throw err;
         }
+
+        let rolledBack = false;
+        transaction.on('rollback', aborted => {
+            // emited with aborted === true
+            if (aborted) rolledBack = true;
+        })
+
+
+        const request = new sql.Request(transaction)
+        request.input('masp', sql.Int, productID)
+        request.input('madl', sql.Int, storeID)
+
+        const test = await request.query('select cs.MaSP,cs.MaDL,cs.STT, DiaChi, SLTon'
+            + ' from CHINHANH c,CHINHANH_SANPHAM cs'
+            + ' where c.MaDL=cs.MaDL AND c.STT=cs.STT and cs.MaDL=@madl and cs.MaSP=@masp')
+            .then(result => {
+                res = result.recordset;
+                if (err) {
+                    if (!rolledBack) {
+                        transaction.rollback(err => {
+                            console.log('Rollback transaction');
+                            return null;
+                        })
+                    }
+                } else {
+                    transaction.commit(err => {
+                        console.log('Transaction committed.');
+                    })
+                    return res;
+                }
+
+            })
+
+        return test;
+
+    });
+
+    console.log('last', transaction.test);
+    return transaction.test;
+}
+
+async function addNewUser(name, address, phone, email, username, password) {
+    try {
+        let pool = await sql.connect(config);
+
+        const newUser = await pool.request();
+        newUser.input('TenKH', sql.NVarChar(50), name);
+        newUser.input('DiaCHi', sql.NVarChar(200), address);
+        newUser.input('SDT', sql.Char(10), phone);
+        newUser.input('Email', sql.VarChar(30), email);
+        newUser.input('Login', sql.VarChar(20), username);
+        newUser.input('Pass', sql.VarChar(20), password);
+
+        newUser.execute('SP_TAO_TAI_KHOAN_KHACH_HANG_2', (err, result) => {
+            if (result.returnValue == 0) return 0;
+        })
+        return 1;
     } catch (error) {
         console.log(error);
         return 0;
     }
 }
 
-async function verifyCustomer(phone) {
+
+
+async function verifyCustomer(username, password) {
     try {
         let pool = await sql.connect(config);
         let customer = await pool.request()
-            .input('input_parameter', sql.Char(10), phone)
-            .query("SELECT * FROM KHACHHANG WHERE SDT = @input_parameter");
+            .input('username', sql.VarChar(20), username)
+            .input('password', sql.VarChar(20), password)
+            .query("SELECT * FROM KHACHHANG WHERE TenDangNhap = @username AND MatKhau = @password");
         if (customer.recordset.length == 0) return null;
         return customer.recordset;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function verifyStaff(phone) {
-    try {
-        let pool = await sql.connect(config);
-        let staff = await pool.request()
-            .input('input_parameter', sql.Char(10), phone)
-            .query("SELECT * FROM NHANVIEN WHERE SDT = @input_parameter");
-        if (staff.recordset.length == 0) return null;
-        return staff.recordset;
     }
     catch (error) {
         console.log(error);
@@ -122,8 +198,11 @@ async function search(searchName) {
     try {
         let pool = await sql.connect(config);
         let product = await pool.request()
-            .input('input_parameter', sql.VarChar, '%' + searchName + '%')
-            .query("SELECT * FROM SANPHAM WHERE TenSP LIKE @input_parameter");
+            .input('search', sql.VarChar, '%' + searchName + '%')
+            .query("SELECT s.MaSP,TenSP, d.MaDL, TenDL, GiaBan, SUM(SLBan) as DaBan"
+                + " from SANPHAM s,CHINHANH_SANPHAM cs, DAILY d"
+                + " where s.MaSP=cs.MaSP and cs.MaDL = d.MaDL AND TenSP LIKE @search"
+                + " GROUP by s.masp,tensp, d.MaDL,TenDL, GiaBan");
         if (product.recordset.length == 0) return null;
         return product.recordset;
     }
@@ -132,6 +211,21 @@ async function search(searchName) {
     }
 }
 
+
+async function verifyStaff(phone) {
+    try {
+        let pool = await sql.connect(config);
+        let staff = await pool.request()
+            .input('sdt', sql.Char(10), phone)
+            .query("SELECT * FROM NHANVIEN WHERE SDT = @sdt");
+        if (staff.recordset.length == 0) return null;
+        return staff.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
 async function addToOrder(customerID, address, grandTotal, staffID) {
     try {
         let pool = await sql.connect(config);
@@ -155,20 +249,42 @@ async function addToOrder(customerID, address, grandTotal, staffID) {
     }
 }
 
-async function addToOrder(customerID, address, grandTotal, staffID) {
+async function getProductOfBranch(productID, storeID, branch) {
+    try {
+        let pool = await sql.connect(config);
+        let product = await pool.request()
+            .input('productID', sql.Int, productID)
+            .input('storeID', sql.Int, storeID)
+            .input('branch', sql.Int, branch)
+            .query("SELECT s.MaSP,cs.MaDL,STT,GiaBan,TenSP, SLTon,TenDL"
+                + " from CHINHANH_SANPHAM cs, SANPHAM s,DAILY d"
+                + " where cs.MaDL=@storeID AND s.MaSP=cs.MaSP AND s.MaSP=@productID AND STT=@branch AND d.MaDL=cs.MaDL");
+        if (product.recordset.length == 0) return null;
+        return product.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function addToOrder(storeID, branch, customerID, payments, address, fee, grandTotal) {
     try {
         let pool = await sql.connect(config);
         let order = await pool.request()
-            .input('DiaChi', sql.NVarChar(100), address)
+            .input('MaDL', sql.Int, storeID)
+            .input('STT', sql.Int, branch)
             .input('MaKH', sql.Int, customerID)
-            .input('MaNV', sql.Int, staffID)
+            .input('HinhThuc', sql.Int, payments)
+            .input('DiaChi', sql.NVarChar(100), address)
+            .input('PhiVanChuyen', sql.Money, fee)
             .input('TongTien', sql.Money, grandTotal)
-            .query("Insert into HOADON (NgayLap,DiaChiNhanHang,MaKH,MaNV,TongTien)"
-                + " values (getdate(),@DiaChi,@MaKH,@MaNV,@TongTien)");
+            .query("Insert into DONHANG (MaDL,STT,MaKH,HinhThucThanhToan,DCNhanHang,"
+                + " PhiVanChuyen, NgayLap, TrangThaiDH,TongTien)"
+                + " values (@MaDL,@STT,@MaKH,@HinhThuc,@DiaChi,@PhiVanChuyen,getdate(),0,@TongTien)");
 
         let orderID = await pool.request()
             .input('MaKH', sql.Int, customerID)
-            .query("Select max(mahd)as newID from hoadon where makh=@MaKH");
+            .query("Select max(madh)as newID from donhang where makh=@MaKH");
 
         return orderID.recordset.at(0).newID;
     }
@@ -176,121 +292,134 @@ async function addToOrder(customerID, address, grandTotal, staffID) {
         console.log(error);
         return 0;
     }
-
-
 }
 
 
-async function addOrderDetail(orderID, productID, cost, discount, quantity, total) {
+async function addOrderDetail(orderID, productID, cost, quantity, storeID, customerID, branch) {
     try {
         let pool = await sql.connect(config);
-        let orderDetail = await pool.request()
-            .input('MaHD', sql.Int, orderID)
-            .input('MaSP', sql.Int, productID)
-            .input('GiaBan', sql.Money, cost)
-            .input('GiaGiam', sql.Money, discount)
-            .input('SoLuong', sql.Int, quantity)
-            .input('ThanhTien', sql.Money, total)
-            .query("Insert into CT_HOADON (MaHD,MaSP,GiaBan,GiaGiam,SoLuong,ThanhTien)"
-                + " values (@MaHD, @MaSP, @GiaBan, @GiaGiam, @SoLuong, @ThanhTien)");
-        return 1;
+        let orderDetail = await pool.request();
+        orderDetail.input('madh', sql.Int, orderID);
+        orderDetail.input('masp', sql.Int, productID);
+        orderDetail.input('soluong', sql.Int, quantity);
+        orderDetail.input('madl', sql.Int, storeID);
+        orderDetail.input('chinhanh', sql.Int, branch);
+        orderDetail.input('makh', sql.Int, customerID);
+        orderDetail.input('gia', sql.Money, cost);
+        if (quantity == 2) {
+            orderDetail.execute('sp_THEM_SP_VAO_DON_HANG', (err, result) => {
+                //console.log(err);
+            })
+            return orderDetail.returnValue;
+        }
+        orderDetail.execute('sp_THEM_SP_VAO_DON_HANG_2', (err, result) => {
+            //console.log(err);
+        })
+        return orderDetail.returnValue;
     }
     catch (error) {
         console.log(error);
         return 0;
-    }
-}
-
-async function showAllOrder(customerID) {
-    try {
-        let pool = await sql.connect(config);
-        let orders = await pool.request()
-            .input('MaKH', sql.Int, customerID)
-            .query("Select convert(varchar(10), NgayLap, 105) AS NgayLap,"
-                + " MaHD, DiaChiNhanHang, TongTien, MaKH, MaNV, TinhTrang"
-                + " from hoadon where makh=@MaKH");
-            if(orders.recordset.length == 0) return null;
-        return orders.recordset;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function addShoppingHistory(customerID, productID) {
-    try {
-        let pool = await sql.connect(config);
-        let orderDetail = await pool.request()
-            .input('MaKH', sql.Int, customerID)
-            .input('MaSP', sql.Int, productID)
-            .query("insert into LS_MUAHANG(MaKH,MaSP) values(@MaKH,@MaSP)");
-        return 1;
-    }
-    catch (error) {
-        console.log(error);
-        return 0;
-    }
-}
-
-async function showHistory(customerID) {
-    try {
-        let pool = await sql.connect(config);
-        let history = await pool.request()
-            .input('input_parameter', sql.Int, customerID)
-            .query("SELECT S.MaSP, TenSP, GiaBan from LS_MUAHANG LS, SANPHAM S where MAKH = @input_parameter AND LS.MaSP=S.MaSP");
-        return history.recordset;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function getOrderList(orderID){
-    try {
-        let pool = await sql.connect(config);
-        let detail = await pool.request()
-            .input('input_parameter', sql.Int, orderID)
-            .query("SELECT h.MaHD, ct.MaSP, TenSP, ct.GiaBan, GiaGiam, SoLuong, ThanhTien"
-                + " FROM HOADON h, CT_HOADON ct, SANPHAM s"
-                + " WHERE h.MAHD = ct.MAHD AND h.MaHD=@input_parameter AND ct.MaSP=s.MaSP");
-            if(detail.recordset.length==0) return null;
-        return detail.recordset;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function getOrderDetail(orderID){
-    try {
-        let pool = await sql.connect(config);
-        let detail = await pool.request()
-            .input('input_parameter', sql.Int, orderID)
-            .query("SELECT h.MaHD, convert(varchar(10), NgayLap, 105) AS NgayLap, DiaChiNhanHang, TongTien, TenNV, TinhTrang"
-                + " FROM HOADON h LEFT JOIN NHANVIEN n ON h.MaNV=n.MaNV"
-                + " WHERE h.MaHD=@input_parameter");
-            if(detail.recordset.length==0) return null;
-        return detail.recordset;
-    }
-    catch (error) {
-        console.log(error);
     }
 }
 
 module.exports = {
-    getProduct: getProduct,
-    get10Products: get10Products,
+    getProductsList: getProductsList,
+    getStoreList: getStoreList,
+    getStoreDetail: getStoreDetail,
+    getProductOfStore: getProductOfStore,
     getProductDetail: getProductDetail,
+    getBranchHaveProduct: getBranchHaveProduct,
     addNewUser: addNewUser,
     verifyCustomer: verifyCustomer,
     verifyStaff: verifyStaff,
     search: search,
-    getDiscount: getDiscount,
     addToOrder: addToOrder,
+    getProductOfBranch: getProductOfBranch,
     addOrderDetail: addOrderDetail,
-    addShoppingHistory: addShoppingHistory,
-    showHistory: showHistory,
-    showAllOrder: showAllOrder,
-    getOrderDetail: getOrderDetail,
-    getOrderList: getOrderList,
+    getBranchHaveProduct2: getBranchHaveProduct2,
+    // addShoppingHistory: addShoppingHistory,
+    // showHistory: showHistory,
+    // showAllOrder: showAllOrder,
+    // getOrderDetail: getOrderDetail,
+    // getOrderList: getOrderList,
 }
+
+
+
+// async function showAllOrder(customerID) {
+//     try {
+//         let pool = await sql.connect(config);
+//         let orders = await pool.request()
+//             .input('MaKH', sql.Int, customerID)
+//             .query("Select convert(varchar(10), NgayLap, 105) AS NgayLap,"
+//                 + " MaHD, DiaChiNhanHang, TongTien, MaKH, MaNV, TinhTrang"
+//                 + " from hoadon where makh=@MaKH");
+//             if(orders.recordset.length == 0) return null;
+//         return orders.recordset;
+//     }
+//     catch (error) {
+//         console.log(error);
+//     }
+// }
+
+// async function addShoppingHistory(customerID, productID) {
+//     try {
+//         let pool = await sql.connect(config);
+//         let orderDetail = await pool.request()
+//             .input('MaKH', sql.Int, customerID)
+//             .input('MaSP', sql.Int, productID)
+//             .query("insert into LS_MUAHANG(MaKH,MaSP) values(@MaKH,@MaSP)");
+//         return 1;
+//     }
+//     catch (error) {
+//         console.log(error);
+//         return 0;
+//     }
+// }
+
+// async function showHistory(customerID) {
+//     try {
+//         let pool = await sql.connect(config);
+//         let history = await pool.request()
+//             .input('input_parameter', sql.Int, customerID)
+//             .query("SELECT S.MaSP, TenSP, GiaBan from LS_MUAHANG LS, SANPHAM S where MAKH = @input_parameter AND LS.MaSP=S.MaSP");
+//         return history.recordset;
+//     }
+//     catch (error) {
+//         console.log(error);
+//     }
+// }
+
+// async function getOrderList(orderID){
+//     try {
+//         let pool = await sql.connect(config);
+//         let detail = await pool.request()
+//             .input('input_parameter', sql.Int, orderID)
+//             .query("SELECT h.MaHD, ct.MaSP, TenSP, ct.GiaBan, GiaGiam, SoLuong, ThanhTien"
+//                 + " FROM HOADON h, CT_HOADON ct, SANPHAM s"
+//                 + " WHERE h.MAHD = ct.MAHD AND h.MaHD=@input_parameter AND ct.MaSP=s.MaSP");
+//             if(detail.recordset.length==0) return null;
+//         return detail.recordset;
+//     }
+//     catch (error) {
+//         console.log(error);
+//     }
+// }
+
+// async function getOrderDetail(orderID){
+//     try {
+//         let pool = await sql.connect(config);
+//         let detail = await pool.request()
+//             .input('input_parameter', sql.Int, orderID)
+//             .query("SELECT h.MaHD, convert(varchar(10), NgayLap, 105) AS NgayLap, DiaChiNhanHang, TongTien, TenNV, TinhTrang"
+//                 + " FROM HOADON h LEFT JOIN NHANVIEN n ON h.MaNV=n.MaNV"
+//                 + " WHERE h.MaHD=@input_parameter");
+//             if(detail.recordset.length==0) return null;
+//         return detail.recordset;
+//     }
+//     catch (error) {
+//         console.log(error);
+//     }
+// }
+

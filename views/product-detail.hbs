@@ -9,7 +9,7 @@
                         <div class="col-md-5 khoianh">
                             <div class="anhto mb-4">
 
-                                <img class="product-image" src="/img/product-mix3.png" alt="ma-bun-luu-manh-mt"
+                                <img class="product-image" src="/img/iphone.png" alt="ma-bun-luu-manh-mt"
                                     style="width: 100%;">
 
                             </div>
@@ -21,53 +21,39 @@
                                 <div class="col-md-12 mb-4 header text-left"
                                     style="border-bottom: 1px solid rgba(110, 117, 241, 0.347)">
                                     {{#each product}}
-                                    <h2 class="ten"><b>{{this.TenSP}}</b></h2>
+                                    <h2 class="ten text-uppercase"><b>{{this.TenSP}}</b></h2>
                                     {{/each}}
                                 </div>
 
                                 <div class="col-md-7">
+                                    {{#each product}}
                                     <div class="row">
-                                        {{#each product}}
+
                                         <div class="col-4 text-left">
                                             <h5>Giá bán: </h5>
                                         </div>
                                         <div class="col-8 text-left text-danger">
-                                            <h3><b>{{this.GiaBan}}</b>đ</h3>
+                                            <h3><b>{{this.GiaBan}}</b>$</h3>
                                         </div>
-                                        {{/each}}
+
                                     </div>
-                                    {{#if discount}}
-                                    {{#each discount}}
                                     <div class="row">
-                                        <div class="col-5 text-left">
-                                            <small>Ưu đãi giảm </small>
-                                        </div>
-                                        <div class="col-7 text-left text-primary">
-                                            <h4><b>
-                                                    {{this.Giam}}
-                                                </b>đ</h4>
-                                        </div>
-
-                                    </div>
-                                    <div class="row text-left">
-                                        <div class="col">
-                                            <small>Ưu đãi từ ngày {{this.NgayBatDau}} đến {{this.NgayKetThuc}}</small>
+                                        <div class="col text-left">
+                                            <h6>Đã bán: <b>{{this.DaBan}}</b> sản phẩm</h6>
                                         </div>
                                     </div>
-
                                     {{/each}}
-                                    {{/if}}
-                                    <div class="uudai my-4 text-left">
-                                        <h6 class="header font-weight-bold">Khuyến mãi & Ưu đãi tại ConCung</h6>
+                                    <div class="uudai my-3 text-left">
+                                        <h6 class="header font-weight-bold">Khuyến mãi & Ưu đãi khi mua hàng</h6>
                                         <ul>
-                                            <li><b>Miễn phí giao hàng </b>cho đơn hàng thanh toán trực tiếp tại cửa
-                                                hàng</li>
-                                            <li><b>Combo đồ chơi siêu nhân GIẢM 25% </b></li>
-                                            <li><b>Tặng phiếu giảm giá</b> cho mỗi đơn hàng trên 500.000đ</li>
-                                            <li><b>Tặng 1 quyển truyện tranh miễn phí </b></li>
+                                            <li><b>Tặng 1 SIM 4G miễn phí DATA trong 1 tháng</b></li>
+                                            <li><b>Giảm 30% </b>khi mua các sản phẩm phụ kiện</li>
+                                            <li>Trả góp <b>lãi suất đặc biệt 0% </b></li>
+                                            <li>Bảo hành <b>chính hãng 1 năm</b> </li>
+                                            <li>Hư gì đổi nấy <b>12 tháng </b>tại tất cả chi nhánh</li>
                                         </ul>
                                     </div>
-                                    {{#each product}}
+
                                     <form method="get" action="/addToCart">
 
                                         <div class="soluong d-flex">
@@ -83,46 +69,61 @@
                                                     <span class="input-group-text btn-spin btn-inc">+</span>
                                                 </div>
                                             </div>
-
                                         </div>
+                                        <div class="input-group mb-3">
+                                            <select class="custom-select" id="inputGroupSelect01" name="branch" required>
+                                                <option value="">Xem chi nhánh có hàng</option>
+                                                {{#each branch}}
+                                                    <option value="{{this.STT}}">{{this.DiaChi}} - còn lại: {{this.SLTon}} sản phẩm</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                        
+                                        {{#each product}}
                                         <input type="hidden" name="productID" value="{{this.MaSP}}">
+                                        <input type="hidden" name="storeID" value="{{this.MaDL}}">
+                                        {{/each}}
                                         <button type="submit" class="nutmua btn w-100 text-uppercase">THÊM VÀO GIỎ
                                             HÀNG</button>
 
                                 </div>
 
                                 </form>
-                                {{/each}}
+
                                 <div class="col-md-5">
                                     <div class="thongtinsach text-left">
                                         <ul>
                                             {{#each product}}
                                             <li>Mã số sản phẩm: <b>{{this.MaSP}}</b></li>
                                             <li>Loại sản phẩm:
-                                                <a href="/product-type/{{this.TenLoai}}"
-                                                    class="tacgia">{{this.TenLoai}}</a>
+                                                <a href="/product-type/{{this.TenLoaiSP}}"
+                                                    class="tacgia">{{this.TenLoaiSP}}</a>
                                             </li>
                                             <li>Thương hiệu:
-                                                <a href="/thuong-hieu/{{this.TenThuongHieu}}"
-                                                    class="tacgia">{{this.TenThuongHieu}}</a>
+                                                <a href="/thuong-hieu/{{this.ThuongHieu}}"
+                                                    class="tacgia">{{this.ThuongHieu}}</a>
                                             </li>
-                                            <li>Hạn sử dụng: <b>{{this.HanSuDung}}</b> tháng</li>
-                                            <li>Còn lại: <b>{{this.TongSoLuongTon}}</b> sản phẩm</li>
+                                            <li>Còn lại: <b>{{this.TongSLTon}}</b> sản phẩm</li>
                                             {{/each}}
                                         </ul>
                                     </div>
 
                                     <div class="thongtinsach text-center mt-4">
-                                        <img class="w-100" src="/img/giay-chung-nhan.bmp" alt="">
+                                        <img class="img-thumbnail rounded-circle border-primary" src="/img/bg.png.bmp" alt="logo">
+                                        {{#each storeDetail}}
+                                        <a href="/store/{{this.MaDL}}" class="mt-2 text-decoration-none">
+                                            <h5><b>{{this.TenDL}}</b></h5>
+                                            <button type="button" class="btn btn-outline-primary">Xem cửa hàng</button>
+                                        </a>
+                                        
+                                        {{/each}}
                                     </div>
-                                    <div class="thongtinsach text-center mt-4">
-                                        <img class="w-100" src="/img/c9rd5i10.bmp" alt="">
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
                         <!-- decripstion của 1 sản phẩm: giới thiệu , đánh giá độc giả  -->
-                        <div class="product-description col-md-9 text-left">
+                        <div class="product-description col-md-9 text-left mt-5">
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                     <a class="nav-item nav-link active text-uppercase" id="nav-gioithieu-tab"

@@ -3,33 +3,34 @@ const db = require('../models/dbOperations');
 
 class SiteController {
     //[GET]/
-    home(req, res, next) {
+    async home(req, res, next) {
 
-        db.get10Products().then((data) => {
-            //res.json(data);
-            //console.log(data);
-            if (req.session.user) {
+        const productsList = await db.getProductsList();
+        const storeList = await db.getStoreList();
 
-                res.render('home', {
-                    title: 'Trang chủ',
-                    user: req.session.user,
-                    numberOfProduct: req.session.cart.length,
-                    products: data,
-                    cssP: () => 'css',
-                    scriptP: () => 'script',
-                    navP: () => 'navCustomer',
-                    footerP: () => 'footer',
-                });
-                return;
-            }
+        if (req.session.user) {
+
             res.render('home', {
                 title: 'Trang chủ',
-                products: data,
+                user: req.session.user,
+                numberOfProduct: req.session.cart.length,
+                products: productsList,
+                stores: storeList,
                 cssP: () => 'css',
                 scriptP: () => 'script',
-                navP: () => 'nav',
+                navP: () => 'navCustomer',
                 footerP: () => 'footer',
-            })
+            });
+            return;
+        }
+        res.render('home', {
+            title: 'Trang chủ',
+            products: productsList,
+            stores: storeList,
+            cssP: () => 'css',
+            scriptP: () => 'script',
+            navP: () => 'nav',
+            footerP: () => 'footer',
         })
     }
 
@@ -73,7 +74,7 @@ class SiteController {
     singin(req, res, next) {
         res.render('sign-in', {
             title: 'Đăng nhập',
-            cssP: () => 'accountStyle',
+            cssP: () => 'signinStyle',
             scriptP: () => 'script',
             navP: () => 'nav',
             footerP: () => 'footer',
@@ -91,27 +92,31 @@ class SiteController {
         const name = req.body.name;
         const address = req.body.address;
         const phone = req.body.phone;
-        const success = await db.addNewUser(name, address, phone);
-        if (success == 0) {
-            console.log('Tài khoản đã tồn tại');
-            res.send('Tài khoản đã tồn tại');
+        const email = req.body.email;
+        const username = req.body.username;
+        const password = req.body.password;
+        const success = await db.addNewUser(name, address, phone,email,username,password);
+        if (success != 1) {
+            res.send('Đăng ký không thành công');
             return;
         }
         else {
-            const user = await db.verifyCustomer(phone);
+            const user = await db.verifyCustomer(username,password);
             req.session.user = user;
             req.session.cart = [];
             req.session.grandTotal = 0;
             res.redirect('/');
+            //res.send('Đăng ký thành công');
             return;
         }
-
     }
+
 
     //[POST]/verifyCustomer
     async verifyCustomer(req, res, next) {
-        const phone = req.body.phone;
-        const user = await db.verifyCustomer(phone);
+        const username = req.body.username;
+        const password = req.body.password;
+        const user = await db.verifyCustomer(username,password);
         if (user) {
             console.log('Đăng nhập thành công');
             req.session.user = user;
@@ -120,7 +125,7 @@ class SiteController {
             res.redirect('/');
             return;
         }
-        res.send('SĐT này chưa được đăng ký');
+        res.send('Tên đăng nhập hoặc mật khẩu không đúng');
         return;
     }
 
@@ -130,6 +135,9 @@ class SiteController {
         const user = await db.verifyStaff(phone);
         if (user) {
             console.log('Đăng nhập thành công');
+            req.session.user = user;
+            req.session.cart = [];
+            req.session.grandTotal = 0;
             res.send(user.at(0).TenNV);
             return;
         }
@@ -170,36 +178,40 @@ class SiteController {
 
     }
 
-    //[GET]/addToCart?productID=...&quantity=...
+    //[GET]/addToCart?productID=...&quantity=...&branch=...
     async addToCart(req, res, next) {
         if (req.session.user) {
-            const product = await db.getProduct(req.query.productID);
+            const productID = req.query.productID;
+            const storeID = req.query.storeID;
+            const branch = req.query.branch;
+            const quantity = req.query.q;
+            const product = await db.getProductOfBranch(productID,storeID,branch);
 
-            const q = req.query.q;
-            for (var i = 0; i < req.session.cart.length; i++) {
-                if (req.session.cart[i].productID == product.at(0).MaSP) {
-                    res.redirect('/');
-                    return;
-                }
-            }
-            var discountRate = await db.getDiscount(req.query.productID);
-            if (discountRate) discountRate = discountRate.at(0).Giam;
-            else discountRate = 0;
-            const discount = discountRate * product.at(0).GiaBan;
-            const total = (product.at(0).GiaBan - discount) * parseInt(q);
+            // for (var i = 0; i < req.session.cart.length; i++) {
+            //     if (req.session.cart[i].productID == product.at(0).MaSP) {
+            //         res.redirect('/');
+            //         return;
+            //     }
+            // }
+
+
+            const total = (product.at(0).GiaBan) * parseInt(quantity);
+            
 
             req.session.cart.push({
                 productName: product.at(0).TenSP,
                 productID: product.at(0).MaSP,
+                storeID: product.at(0).MaDL,
+                storeName: product.at(0).TenDL,
                 cost: product.at(0).GiaBan,
-                discount: discount,
-                quantity: q,
+                branch: branch,
+                quantity: quantity,
                 total: total,
             });
-
+        
             req.session.grandTotal = req.session.grandTotal + total;
-
-            res.redirect('/');
+          
+            res.redirect('back');
             // console.log('---------------------------------');
             // console.log(req.session.cart);
             return;
@@ -219,8 +231,6 @@ class SiteController {
                     return;
                 }
             }
-
-
             res.redirect('/');
             return;
         }
@@ -230,17 +240,20 @@ class SiteController {
     //[POST]/addToOrder
     async addToOrder(req, res, next) {
         if (req.session.user) {
+            console.log(req.session.cart);
             const address = req.body.address;
-            const grandTotal = req.session.grandTotal;
+            const shipFee = req.body.fee;
+            const payments = req.body.payments;
+            const grandTotal = req.session.grandTotal + shipFee;
             const customerID = req.session.user.at(0).MaKH;
-
-            const orderID = await db.addToOrder(customerID, address, grandTotal, null);
-
+            const storeID = req.session.cart[0].storeID;
+            const branch = req.session.cart[0].branch;
+            const orderID = await db.addToOrder(storeID,branch,customerID,payments,address,shipFee,grandTotal);
 
             req.session.cart.forEach(product => {
-                db.addOrderDetail(orderID, product.productID, product.cost, product.discount, product.quantity, product.total);
-                db.addShoppingHistory(customerID, product.productID);
+                db.addOrderDetail(orderID, product.productID, product.cost,  product.quantity, storeID,customerID,branch);
             });
+
 
             req.session.cart = [];
             req.session.grandTotal = 0;
@@ -250,41 +263,23 @@ class SiteController {
         res.redirect('/sign-in');
     }
 
-    //[GET]/history
-    history(req, res, next) {
-        if (req.session.user) {
-            db.showHistory(req.session.user.at(0).MaKH).then((data) => {
-                res.render('history', {
-                    title: 'Lịch sử mua sắm',
-                    user: req.session.user,
-                    numberOfProduct: req.session.cart.length,
-                    products: data,
-                    cssP: () => 'css',
-                    scriptP: () => 'script',
-                    navP: () => 'navCustomer',
-                    footerP: () => 'footer',
-                });
-            });
-            return;
-        }
-        res.redirect('/sign-in');
-    }
 
-    profile(req,res,next){
-        if (req.session.user) {
-            res.render('profile', {
-                title: 'Thông tin cá nhân',
-                user: req.session.user,
-                numberOfProduct: req.session.cart.length,
-                cssP: () => 'invoice-template',
-                scriptP: () => 'script',
-                navP: () => 'navCustomer',
-                footerP: () => 'footer',
-            });
-            return;
-        }
-        res.redirect('/sign-in');
-    }
+
+    // profile(req,res,next){
+    //     if (req.session.user) {
+    //         res.render('profile', {
+    //             title: 'Thông tin cá nhân',
+    //             user: req.session.user,
+    //             numberOfProduct: req.session.cart.length,
+    //             cssP: () => 'invoice-template',
+    //             scriptP: () => 'script',
+    //             navP: () => 'navCustomer',
+    //             footerP: () => 'footer',
+    //         });
+    //         return;
+    //     }
+    //     res.redirect('/sign-in');
+    // }
 }
 
 module.exports = new SiteController;

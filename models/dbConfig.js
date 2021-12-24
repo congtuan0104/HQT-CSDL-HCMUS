@@ -5,23 +5,11 @@ const config = {
     password: '1234',
     server: 'CONGTUAN\\CONGTUAN',
     driver: 'msnodesqlv8',
-    database: 'DoAn02',
+    database: 'CUAHANG',
     port: 1433,
     options: {
-        trustedConnection: true
-    }
-}
-
-async function connect(){
-    try {
-        await sql.connect(config, function (err) {
-            console.log('Kết nối thành công');
-        });
-        
-    } catch (err) {
-        console.log('Kết nối không thành công');
+        trustedConnection: true,
     }
 }
 
 module.exports = config;
-

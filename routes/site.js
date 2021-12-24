@@ -15,8 +15,7 @@ route.get('/search',siteController.search);
 route.get('/addToCart',siteController.addToCart);
 route.get('/removeFromCart',siteController.removeFromCart);
 route.post('/addToOrder', siteController.addToOrder);
-route.get('/history', siteController.history);
-route.get('/profile',siteController.profile);
+// route.get('/profile',siteController.profile);
 route.get('/',siteController.home);
 
 module.exports = route;

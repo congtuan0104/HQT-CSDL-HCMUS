@@ -1,0 +1,99 @@
+<div class="page-content container">
+    <div class="container">
+        <div class="row mt-4" style="border: 3px solid rgb(240, 131, 6); padding-top:20px;
+        background-color:white; padding-bottom: 15px;">
+            <div class="col-12 col-lg-10 offset-lg-1">
+                {{#each storeDetail}}
+                <div class="row text-center mt-2 mb-3 text-primary" style="border-bottom: 1px solid rgb(248, 140, 77)">
+                    <div class="col border-bottom-2">
+                        <h2 class="text-uppercase text-dark"><b>{{this.TenDL}}</b></h2>
+                    </div>
+
+                </div>
+
+                <div class="row text-left">
+                    <div class="col-sm-2">
+                        <img src="/img/bhqgz3fk.bmp" style="width:100%" alt="">
+                    </div>
+                    <div class="col-sm-5">
+
+                        <div class="text-grey-m2">
+
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Người đại diện: </span> {{this.TenDL}}</div>
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Số điện thoại: </span> {{this.SDT}}</div>
+
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Địa chỉ văn phòng làm việc: </span>
+                                {{this.DiaChiKinhDoanh}}</div>
+
+                        </div>
+                    </div>
+                    <!-- /.col -->
+
+                    <div class="text-95 col-sm-5 align-self-start d-sm-flex justify-content-end">
+
+                        <div class="text-grey-m2">
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Mã số hoá đơn: </span> {{this.TenDL}}</div>
+
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
+                                    class="text-600 text-90">Ngày lập</span> {{this.TenDL}}</div>
+
+                            <div class="my-2">
+                                <i class="fa fa-circle text-blue-m2 text-xs mr-1"></i>
+                                <span class="text-600 text-90">Tình trạng</span>
+                                <span class="badge badge-warning badge-pill px-25">{{this.TenDL}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                {{/each}}
+
+            </div>
+        </div>
+        <div class="row text-center mt-5">
+            <div class="col">
+                <h2><b>SẢN PHẨM</b></h2>
+            </div>
+        </div>
+        <div class="row mt-4 ">
+
+            <div class="row">
+
+                {{#each products}}
+                <div class="col-sm-6 col-lg-3 mb-4" style="padding: 0;">
+                    <div class="card h-100 " style="border: 1px solid #ff6600; border-radius:0">
+                        <a href="/store/{{this.MaDL}}?productID={{this.MaSP}}">
+                            <img src="/img/iphone.png" class="card-img-top" alt="Hình minh hoạ">
+                        </a>
+                        <div class="card-body">
+                            <a class="text-decoration-none" href="/store/{{this.MaDL}}?productID={{this.MaSP}}">
+                                <h5 class="card-title text-uppercase text-primary">{{this.TenSP}}</h5>
+                            </a>
+                            
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="card-text text-left text-danger "><b
+                                                class="money">{{this.GiaBan}}$</b>
+                                            </h6>
+                                    </div>
+                                    <div class="col">Đã bán: {{this.DaBan}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+
+            </div>
+        </div>
+
+    </div>
+</div>

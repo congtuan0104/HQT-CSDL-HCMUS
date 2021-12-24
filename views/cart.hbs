@@ -1,5 +1,5 @@
 <div class="mt-4">
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color: white; border-radius:15px;padding-left:1px;padding-right:1px">
         {{#if user}}
         <div class="card">
             <div class="row">
@@ -7,7 +7,7 @@
                     <div class="title pt-2">
                         <div class="row">
                             <div class="col text-left">
-                                <h4><b>Giỏ hàng</b></h4>
+                                <h4 class="ml-5"><b>Giỏ hàng</b></h4>
                             </div>
                             <div class="col align-self-center text-right text-muted">{{this.numberOfProduct}} sản phẩm
                             </div>
@@ -16,13 +16,12 @@
 
                     <div class="row border-top border-bottom">
                         <div class="row main align-items-center">
-                            <div class="col-2">#</div>
+                            <div class="col-1">#</div>
                             <div class="col">
                                 <div class="row">Sản phẩm</div>
                             </div>
-                            
+                            <div class="col"> Đại lý</div>
                             <div class="col"> Giá bán</div>
-                            <div class="col"> Giảm </div>
                             <div class="col-2"> Số lượng</div>
                             <div class="col"> Thành tiền </div>
                              <span class="close">----</span>
@@ -32,15 +31,15 @@
                     {{#each products}}
                     <div class="row border-top border-bottom">
                         <div class="row main align-items-center">
-                            <div class="col-2"><img class="img-fluid" src="/img/product-mix3.png"></div>
+                            <div class="col-1">{{sum @index 1}}</div>
                             <div class="col">
                                 <div class="row text-muted">MSP: {{this.productID}}</div>
                                 <div class="row">{{this.productName}} </div>
                             </div>
-                            <div class="col"> {{this.cost}}</div>
-                            <div class="col">{{this.discount}}</div>
-                            <div class="col-2"> <input class="w-75" type="number" min="1" name="quantity" value="{{this.quantity}}"></div>
-                            <div class="col">{{this.total}}</div>
+                            <div class="col"> {{this.storeName}}</div>
+                            <div class="col"> {{this.cost}}$</div>
+                            <div class="col-2"> {{this.quantity}}</div>
+                            <div class="col">{{this.total}}$</div>
                             
                             <span class="close">
                                     <a style="text-decoration:none"
@@ -81,18 +80,25 @@
                         {{/each}}
                         <div class="form-row mb-2">
 
-                            <label for="age">Hình thức nhận hàng</label>
-                            <select class="custom-select" id="inputGroupSelect01">
-                                <option selected value="1">Giao hàng thường</option>
-                                <option value="2">Giao hàng nhanh</option>
-                                <option value="3">Giao hàng siêu tốc</option>
+                            <label for="age">Hình thức giao hàng</label>
+                            <select class="custom-select" id="inputGroupSelect01" name="fee">
+                                <option selected value="3">Giao hàng thường - 3$</option>
+                                <option value="4">Giao hàng nhanh - 4$</option>
+                                <option value="6">Giao hàng siêu tốc - 6$</option>
                             </select>
                         </div>
-                        <div class="form-row mt-3">
-                            <b class="text-danger">Đặc biệt ưu đãi: </b> Miễn phí vận chuyển
+                        <div class="form-row mb-2">
+
+                            <label for="age">Hình thức thanh toán</label>
+                            <select class="custom-select" id="inputGroupSelect01" name="payments">
+                                <option selected value="1">Thanh toán sau khi nhận hàng</option>
+                                <option value="2">Thanh toán bằng momo</option>
+                                <option value="2">Thanh toán băng thẻ ngân hàng</option>
+                            </select>
                         </div>
-                        <div class="form-row mt-3 text-primary">
-                            <h4>Tổng tiền: {{#with grandTotal}} {{this}} {{/with}}</h4>đ
+                        
+                        <div class="form-row mt-3">
+                            <h4>Tổng tiền: {{#with grandTotal}} {{this}}{{/with}}$</h4>
                         </div>
                         <div class="form-row-last mt-3">
                             <input type="submit" name="register" class="register btn-primary" value="Xác nhận mua hàng">

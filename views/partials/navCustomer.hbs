@@ -1,23 +1,27 @@
 <!-- Navbar -->
-<nav class="navbar navbar-expand-md bg-white navbar-light fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="/" style="color: #CF111A;"><b>ConCung</b>.com</a>
+<nav class="navbar navbar-expand-md bg-white" style="background-color: #ff6600;padding:0">
+    <div class="container-fluid" style="background-color: #ff6600; padding:3px 5px;">
+        <a class="navbar-brand" href="/" style="color: white;">
+            <img src="/img/logo.png" width="65" height="60" class="d-inline-block align-top" alt="">
+            <span style="font-size: 35px;"><b>Shopee</b>.us</span>
+        </a>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
             aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="collapsibleNavId">
-            <form action="/search" method="get" class="form-inline ml-auto my-2 my-lg-0 mr-3">
+            <form action="/search" method="get" class="form-inline ml-auto my-2 my-lg-0 mr-3"  style="border:2px solid white">
                 <div class="input-group" style="width: 520px;">
-                    <input type="text" class="form-control" aria-label="Small"
-                        name="q" placeholder="Nhập sản phẩm cần tìm kiếm...">
+                    <input type="text" name="q" class="form-control" style="border-radius:0" aria-label="Small"
+                        placeholder="Nhập sản phẩm cần tìm kiếm...">
                     <div class="input-group-append">
-                        <button type="submit" class="btn" style="background-color: #CF111A; color: white;">
+                        <button type="submit" class="btn"
+                            style="background-color: #ff6600; color: white; borde-left:2px solid white">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
                 </div>
             </form>
-            
+
             <ul class="navbar-nav mb-1 ml-auto">
                 {{#each user}}
                 <div class="dropdown">
@@ -31,9 +35,9 @@
                     </li>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item nutdangky text-center mb-2" href="/profile">Thông tin tài khoản</a>
-                        <a class="dropdown-item nutdangnhap text-center mb-2" href="/history">Lịch sử mua sắm</a>
                         <a class="dropdown-item nutdangnhap text-center mb-2" href="/my-orders">Đơn hàng</a>
-                        <a class="dropdown-item nutdangnhap text-center" style="background-color: #cf2711;" href="/log-out">Đăng xuất</a>
+                        <a class="dropdown-item nutdangnhap text-center" style="background-color: #cf2711;"
+                            href="/log-out">Đăng xuất</a>
                     </div>
                 </div>
                 {{/each}}
@@ -46,7 +50,7 @@
                         Hàng</a>
                 </li>
             </ul>
-            
+
         </div>
     </div>
 </nav>

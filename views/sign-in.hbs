@@ -1,73 +1,83 @@
 <div class="mt-1">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="page-content" >
-                
-                <div class="card signup_v4 mb-30" style="margin-bottom:70px;margin-top:70px;">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation"> <a class="nav-link active" id="login-tab"
-                                    data-toggle="tab" href="#login" role="tab" aria-controls="login"
-                                    aria-selected="true">Khách hàng</a> </li>
-                            <li class="nav-item" role="presentation"> <a class="nav-link" id="register-tab"
-                                    data-toggle="tab" href="#register" role="tab" aria-controls="register"
-                                    aria-selected="false">Quản lý</a> </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="login" role="tabpanel"
-                                aria-labelledby="login-tab">
-                                <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;">ĐĂNG NHẬP</h4>
-                                <form method="post" action="/verifyCustomer">
-                                    <div class="form-row">
-                                        <div class="form-group col-md-12">
-
-                                            <input type="text" class="form-control" name="phone" id="phone-number"
-                                                class="input-text" placeholder="Số điện thoại bố/mẹ" required
-                                                pattern="0[0-9]{9}">
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-                                            <div class="justify-content-between align-items-center">
-
-                                                <div>Chưa có tài khoản? <a href="/sign-up">Đăng ký</a></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2 mb-3"> <button class="btn btn-primary full-width"
-                                            type="submit">Tiếp tục >></button> </div>
-                                </form>
-                                
-                            </div>
-                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;">ĐĂNG NHẬP</h4>
-                                <form method="post" action="/verifyStaff">
-                                    <div class="form-row">
-                                        <div class="form-group col-md-12">
-
-                                            <input type="text" class="form-control" name="phone" id="phone-number"
-                                                class="input-text" placeholder="Số điện thoại nhân viên quản lý" required
-                                                pattern="0[0-9]{9}">
-                                        </div>
-
-                                        <div class="form-group col-md-12">
-                                            <div class="justify-content-between align-items-center">
-
-                                                <div>Không đăng nhập được? <a href="#">Hỗ trợ</a></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2 mb-3"> <button class="btn btn-primary full-width"
-                                            type="submit">Vào trang quản lý >></button> 
-                                            </div>
-                                </form>
-                                
-                            </div>
+    <section id="tabs">
+        <div class="container">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <h6 class="section-title h1">ĐĂNG NHẬP</h6>
+            <div class="row" style="max-width:1000px">
+                <div class="col-xs-12 ">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
+                                role="tab" aria-controls="nav-home" aria-selected="true">Khách hàng</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
+                                role="tab" aria-controls="nav-profile" aria-selected="false">Đại lý</a>
+                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
+                                role="tab" aria-controls="nav-contact" aria-selected="false">Nhân viên</a>
+                            <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about"
+                                role="tab" aria-controls="nav-about" aria-selected="false">Tài xế</a>
                         </div>
+                    </nav>
+                    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                            aria-labelledby="nav-home-tab">
+                            <form method="post" action="/verifyCustomer" class="pt-5 pb-5">
+                                <div class="form-group text-left">
+                                    <label for="exampleInputEmail1">Tên đăng nhập</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1"
+                                       name="username" aria-describedby="emailHelp" required>
+                                </div>
+                                <div class="form-group text-left">
+                                    <label class="text-left" for="exampleInputPassword1">Mật khẩu</label>
+                                    <input type="password" class="form-control" name="password" id="exampleInputPassword1" required>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Tiếp tục >></button>
+                            </form>
+                            
+                        </div>
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <form method="post" action="/verifyStore" class="pt-5 pb-5">
+                                <div class="form-group text-left">
+                                    <label for="exampleInputEmail1">Số điện thoại</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1"
+                                       name="phone" aria-describedby="emailHelp" required pattern="0[0-9]{9}">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Kênh bán hàng>></button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            <form method="post" action="/verifyStaff" class="pt-5 pb-5">
+                                <div class="form-group text-left">
+                                    <label for="exampleInputEmail1">Số điện thoại</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1"
+                                       name="phone" aria-describedby="emailHelp" required pattern="0[0-9]{9}">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Đến trang quản lý>></button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                            <form method="post" action="/verifyShipper" class="pt-5 pb-5">
+                                <div class="form-group text-left">
+                                    <label for="exampleInputEmail1">Số điện thoại</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1"
+                                       name="phone" aria-describedby="emailHelp" required pattern="0[0-9]{9}">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Tiếp tục >></button>
+                            </form>
+                        </div>
+                        
                     </div>
+
                 </div>
-
             </div>
-
+                </div>
+                <div class="col"></div>
+            </div>
         </div>
-    </div>
+    </section>
 </div>

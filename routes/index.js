@@ -1,11 +1,11 @@
 
 const siteRoute = require('./site');
-const productsRouter = require('./products');
-const ordersRoute = require('./orders');
+const storesRouter = require('./stores');
+// const ordersRoute = require('./orders');
 
 function route(app) {
-    app.use('/my-orders', ordersRoute);
-    app.use('/products', productsRouter);
+    // app.use('/my-orders', ordersRoute);
+    app.use('/store', storesRouter);
     app.use('/', siteRoute);
 }
 module.exports = route;

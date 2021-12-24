@@ -4,32 +4,41 @@
             <div class="page-content">
                 <div class="form-v6-content">
                     <div class="form-left">
-                        <img class="img-thumbnail" src="/img/8joxqdln.bmp" alt="form">
+                        <img class="img-thumbnail" src="/img/tv.png" alt="form" style="border: 0; margin-top:100px">
                     </div>
                     <form class="form-detail" action="/addCustomer" method="post">
-                        <h2>Đăng kí</h2>
+                        <h2>ĐĂNG KÝ</h2>
                         <div class="form-row">
-                            <input type="text" name="name" id="full-name" class="input-text"
-                               placeholder="Họ và tên" required>
+                            <input type="text" name="name" id="full-name" class="input-text" placeholder="Họ và tên"
+                                required>
                         </div>
                         <div class="form-row">
-                            <input type="text" name="address" id="your-address" class="input-text"
-                               name="address" placeholder="Địa chỉ" required>
+                            <input type="text" name="username" id="username" class="input-text" placeholder="Tên đăng nhập"
+                                required>
+                        </div>
+                        <div class="form-row">
+                            <input type="password" name="password" id="password" class="input-text" placeholder="Mật khẩu"
+                                required>
+                        </div>
+                        <div class="form-row">
+                            <input type="text" name="address" id="your-address" class="input-text" name="address"
+                                placeholder="Địa chỉ" required>
                         </div>
                         <div class="form-row">
                             <input type="text" name="phone" id="phone-number" class="input-text"
-                               placeholder="Số điện thoại" required pattern="0[0-9]{9}">
+                                placeholder="Số điện thoại" required pattern="0[0-9]{9}">
                         </div>
                         <div class="form-row">
                             <input type="text" name="email" id="email-address" class="input-text"
                                 placeholder="Địa chỉ email">
                         </div>
                         <div class="form-group col-md-12">
-                                            <div class="justify-content-between align-items-center">
+                            <div class="justify-content-between align-items-center">
 
-                                                <div style="color: rgba(0, 0, 0, 0.417);">Đã có tài khoản? <a href="/sign-in">Đăng nhập</a></div>
-                                            </div>
-                                        </div>
+                                <div style="color: rgba(0, 0, 0, 0.417);">Đã có tài khoản? <a href="/sign-in">Đăng
+                                        nhập</a></div>
+                            </div>
+                        </div>
                         <div class="form-row-last">
                             <input type="submit" name="register" class="register" value="Đăng ký">
                         </div>
