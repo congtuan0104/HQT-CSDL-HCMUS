@@ -129,6 +129,22 @@ class SiteController {
         return;
     }
 
+    //POST/verifyStore
+    async verifyStore(req, res, next) {
+        const phone = req.body.phone;
+        const user = await db.verifyStore(phone);
+        if (user) {
+            console.log('Đăng nhập thành công');
+            req.session.user = user;
+            res.redirect('/sales-channel');
+            //res.send(user.at(0).TenDL);
+            return;
+        }
+
+        res.send('Số điện thoại này chưa được đăng ký')
+        return;
+    }
+
     //POST/verifyStaff
     async verifyStaff(req, res, next) {
         const phone = req.body.phone;
@@ -265,21 +281,21 @@ class SiteController {
 
 
 
-    // profile(req,res,next){
-    //     if (req.session.user) {
-    //         res.render('profile', {
-    //             title: 'Thông tin cá nhân',
-    //             user: req.session.user,
-    //             numberOfProduct: req.session.cart.length,
-    //             cssP: () => 'invoice-template',
-    //             scriptP: () => 'script',
-    //             navP: () => 'navCustomer',
-    //             footerP: () => 'footer',
-    //         });
-    //         return;
-    //     }
-    //     res.redirect('/sign-in');
-    // }
+    profile(req,res,next){
+        if (req.session.user) {
+            res.render('profile', {
+                title: 'Thông tin cá nhân',
+                user: req.session.user,
+                numberOfProduct: req.session.cart.length,
+                cssP: () => 'invoice-template',
+                scriptP: () => 'script',
+                navP: () => 'navCustomer',
+                footerP: () => 'footer',
+            });
+            return;
+        }
+        res.redirect('/sign-in');
+    }
 }
 
 module.exports = new SiteController;

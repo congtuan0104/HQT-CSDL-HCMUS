@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title> {{{title}}} </title>
+    <link rel="stylesheet" href="/css/sale.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/img/logo2.png">
+    {{>(cssP)}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <a class="text-decoration-none" href="/sales-channel">
+            <div class="logo-details">
+            <img class="ml-1 mr-1" src="/img/logo3.png" width="50px" alt="">
+            <span class="logo_name">Shopee.us</span>
+        </div>
+        </a>
+        <ul class="nav-links">
+            <li>
+                <a href="/sales-channel" class="active">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Trang chính</span>
+                </a>
+            </li>
+            <li>
+                <a href="/sales-channel/products">
+                    <i class='bx bx-box'></i>
+                    <span class="links_name">Quản lý sản phẩm</span>
+                </a>
+            </li>
+            <li>
+                <a href="/sales-channel/orders">
+                    <i class='bx bx-list-ul'></i>
+                    <span class="links_name">Quản lý đơn hàng</span>
+                </a>
+            </li>
+            <li>
+                <a href="/sales-channel/statistic">
+                    <i class='bx bx-pie-chart-alt-2'></i>
+                    <span class="links_name">Thống kê</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-coin-stack'></i>
+                    <span class="links_name">Doanh thu</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class='bx bx-message'></i>
+                    <span class="links_name">Tin nhắn</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class='bx bx-detail'></i>
+                    <span class="links_name">Thông tin cửa hàng</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-cog'></i>
+                    <span class="links_name">Cài đặt</span>
+                </a>
+            </li>
+            <li class="log_out">
+                <a href="/log-out">
+                    <i class='bx bx-log-out'></i>
+                    <span class="links_name">Đăng xuất</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <section class="home-section">
+        <nav>
+            <div class="sidebar-button">
+                <i class='bx bx-menu sidebarBtn'></i>
+                <span class="dashboard">{{{tag}}}</span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Nhập sản phẩm muốn tìm kiếm...">
+                <i class='bx bx-search'></i>
+            </div>
+            <div class="profile-details">
+                <img src="/img/bhqgz3fk.bmp" alt="">
+                {{#each user}}
+                <span class="admin_name text-primary">{{this.TenDL}}</span>
+                {{/each}}
+
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <div class="container-fluid">
+                {{{body}}}
+            </div>
+        </div>
+
+    </section>
+
+
+</body>
+
+{{>(scriptP)}}
+<script>
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".sidebarBtn");
+    sidebarBtn.onclick = function () {
+        sidebar.classList.toggle("active");
+        if (sidebar.classList.contains("active")) {
+            sidebarBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+        } else
+            sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+    }
+</script>
+
+</html>

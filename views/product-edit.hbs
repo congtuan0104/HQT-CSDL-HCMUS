@@ -1,0 +1,92 @@
+<div class="row mx-2">
+    <div class="col mx-3 mt-2 mb-4 h-100" style="background-color: white; border-radius:25px;min-width:350px;">
+        <img src="/img/iphone.png" width="100%" alt="">
+    </div>
+
+    <div class="col">
+        <div class="row pt-5 pb-2 px-4 mx-1 mb-4" style="background-color: white; border-radius:25px;min-width:350px;">
+            <div class="col">
+                {{#each product}}
+                <form method="post" action="/updateProduct">
+                    <div class="form-group row">
+                        <label for="inputName" class="col-sm-3 col-form-label">Sản phẩm</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputName" name="ten" value="{{this.TenSP}}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputCost" class="col-sm-3 col-form-label">Giá bán</label>
+                        <div class="col-sm-9">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">$</span>
+                                </div>
+                                <input type="number" class="form-control" value="{{this.GiaBan}}" aria-label="inputCost"
+                                    name="gia" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputName" class="col-sm-3 col-form-label">Mô tả</label>
+                        <div class="col-sm-9">
+                            <textarea rows="3" name="mota" class="form-control"
+                                placeholder="Nhập mô tả về sản phẩm tại đây"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row text-center">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
+                        </div>
+                    </div>
+                </form>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="row py-2 px-4 mx-1 my-3" style="background-color: white; border-radius:25px;min-width:350px;">
+            <div class="col">
+                <div class="row align-items-center border-bottom py-3">
+                    <div class="col-6"> Chi nhánh</div>
+                    <div class="col-3 text-center"> Tồn kho</div>
+                    <div class="col-3 text-center"> Đã bán</div>
+                </div>
+                {{#each branch}}
+                <div class="row align-items-center border-bottom py-3">
+                    <div class="col-6">{{this.DiaChi}}</div>
+                    <div class="col-3 text-center">{{this.SLTon}}</div>
+                    <div class="col-3 text-center">{{this.SLBan}}</div>
+                </div>
+                {{/each}}
+            </div>
+            <div class="mb-2">
+
+                <form action="/updateQuantity" class="mt-5">
+                    <div class="row">
+                        <div class="col-7 pr-1">
+                            <select class="custom-select" id="inputGroupSelect01" name="branch" required>
+                                <option selected value="">Chọn chi nhánh</option>
+                                {{#each branch}}
+                                <option value="{{this.STT}}">{{this.STT}}. {{this.DiaChi}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <div class="input-group">
+                                <input type="number" aria-label="quantity" placeholder="Số lượng nhập" name="quantity"
+                                    class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row text-center mt-4">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Cập nhật số lượng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

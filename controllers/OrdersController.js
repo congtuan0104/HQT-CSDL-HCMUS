@@ -8,15 +8,15 @@ class OrdersController {
 
             if (orders) {
                 orders.forEach(order => {
-                    if (order.TinhTrang == 0) {
-                        order.TinhTrang = 'Đang chuẩn bị hàng';
+                    if (order.TrangThaiDH == 0) {
+                        order.TrangThaiDH = 'Đang chuẩn bị hàng';
 
                     }
-                    else if (order.TinhTrang == 1) {
-                        order.TinhTrang = 'Đang gửi hàng';
+                    else if (order.TrangThaiDH == 1) {
+                        order.TrangThaiDH = 'Đang gửi hàng';
                     }
-                    else if (order.TinhTrang == 2) {
-                        order.TinhTrang = 'Đã nhận hàng/Đã thanh toán';
+                    else if (order.TrangThaiDH == 2) {
+                        order.TrangThaiDH = 'Đã nhận hàng/Đã thanh toán';
                     }
                 });
                 res.render('my-orders', {
@@ -42,15 +42,15 @@ class OrdersController {
         if (req.session.user) {
             const orderDetail = await db.getOrderDetail(req.params.orderID);
             const orderList = await db.getOrderList(req.params.orderID);
-            const status = orderDetail.at(0).TinhTrang;
-            if (orderDetail.at(0).TinhTrang == 0) {
-                orderDetail.at(0).TinhTrang  = 'Đang chuẩn bị hàng';
+            const status = orderDetail.at(0).TrangThaiDH;
+            if (orderDetail.at(0).TrangThaiDH == 0) {
+                orderDetail.at(0).TrangThaiDH  = 'Đang chuẩn bị hàng';
             }
-            else if (orderDetail.at(0).TinhTrang  == 1) {
-                orderDetail.at(0).TinhTrang  = 'Đang gửi hàng';
+            else if (orderDetail.at(0).TrangThaiDH  == 1) {
+                orderDetail.at(0).TrangThaiDH  = 'Đang gửi hàng';
             }
-            else if (orderDetail.at(0).TinhTrang  == 2) {
-                orderDetail.at(0).TinhTrang  = 'Đã nhận hàng/Đã thanh toán';
+            else if (orderDetail.at(0).TrangThaiDH  == 2) {
+                orderDetail.at(0).TrangThaiDH  = 'Đã nhận hàng/Đã thanh toán';
             }
             
 

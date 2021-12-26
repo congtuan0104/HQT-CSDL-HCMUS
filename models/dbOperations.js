@@ -90,7 +90,7 @@ async function getBranchHaveProduct(storeID, productID) {
             //         res = result.recordset;
             //     })
             //return res;
-            .query("SET TRAN ISOLATION LEVEL READ UNCOMMITTED SELECT MaSP, c.MaDL, c.STT, DiaChi, SLTon"
+            .query("SET TRAN ISOLATION LEVEL READ UNCOMMITTED SELECT MaSP, c.MaDL, c.STT, DiaChi, SLTon, SLBan"
                 + " from CHINHANH_SANPHAM cs with(nolock), CHINHANH c with(nolock)"
                 + " where cs.MaDL=@madl AND cs.MaSP=@masp AND"
                 + " c.MaDL=cs.MaDL AND c.STT=cs.STT");
@@ -194,6 +194,35 @@ async function verifyCustomer(username, password) {
     }
 }
 
+async function verifyStore(phone) {
+    try {
+        let pool = await sql.connect(config);
+        let store = await pool.request()
+            .input('sdt', sql.Char(10), phone)
+            .query("SELECT * FROM DAILY WHERE SDT = @sdt");
+            //console.table(store.recordset);
+        if (store.recordset.length == 0) return null;
+        return store.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function verifyStaff(phone) {
+    try {
+        let pool = await sql.connect(config);
+        let staff = await pool.request()
+            .input('sdt', sql.Char(10), phone)
+            .query("SELECT * FROM NHANVIEN WHERE SDT = @sdt");
+        if (staff.recordset.length == 0) return null;
+        return staff.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
 async function search(searchName) {
     try {
         let pool = await sql.connect(config);
@@ -211,20 +240,6 @@ async function search(searchName) {
     }
 }
 
-
-async function verifyStaff(phone) {
-    try {
-        let pool = await sql.connect(config);
-        let staff = await pool.request()
-            .input('sdt', sql.Char(10), phone)
-            .query("SELECT * FROM NHANVIEN WHERE SDT = @sdt");
-        if (staff.recordset.length == 0) return null;
-        return staff.recordset;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
 
 async function addToOrder(customerID, address, grandTotal, staffID) {
     try {
@@ -323,6 +338,54 @@ async function addOrderDetail(orderID, productID, cost, quantity, storeID, custo
     }
 }
 
+async function showAllOrder(customerID) {
+    try {
+        let pool = await sql.connect(config);
+        let orders = await pool.request()
+            .input('MaKH', sql.Int, customerID)
+            .query("Select convert(varchar(10), NgayLap, 105) AS NgayLap,"
+                + " MaDH, MaDL, STT, DCNhanHang, TongTien, MaKH, TrangThaiDH, PhiVanChuyen"
+                + " from DONHANG where makh=@MaKH");
+            if(orders.recordset.length == 0) return null;
+        return orders.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function getOrderDetail(orderID){
+    try {
+        let pool = await sql.connect(config);
+        let detail = await pool.request()
+            .input('input_parameter', sql.Int, orderID)
+            .query("SELECT h.MaDH, convert(varchar(10), NgayLap, 105) AS NgayLap, DCNhanHang, TongTien, TrangThaiDH, PhiVanChuyen"
+                + " FROM DONHANG h "
+                + " WHERE h.MaDH=@input_parameter");
+            if(detail.recordset.length==0) return null;
+        return detail.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function getOrderList(orderID){
+    try {
+        let pool = await sql.connect(config);
+        let detail = await pool.request()
+            .input('input_parameter', sql.Int, orderID)
+            .query("SELECT h.MaDH, ct.MaSP, TenSP, ct.GiaBan, SoLuong, ThanhTien"
+                + " FROM DONHANG h, CHITIETDH ct, SANPHAM s"
+                + " WHERE h.MADH = ct.MADH AND h.MaDH=@input_parameter AND ct.MaSP=s.MaSP");
+            if(detail.recordset.length==0) return null;
+        return detail.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProductsList: getProductsList,
     getStoreList: getStoreList,
@@ -332,94 +395,14 @@ module.exports = {
     getBranchHaveProduct: getBranchHaveProduct,
     addNewUser: addNewUser,
     verifyCustomer: verifyCustomer,
+    verifyStore: verifyStore,
     verifyStaff: verifyStaff,
     search: search,
     addToOrder: addToOrder,
     getProductOfBranch: getProductOfBranch,
     addOrderDetail: addOrderDetail,
     getBranchHaveProduct2: getBranchHaveProduct2,
-    // addShoppingHistory: addShoppingHistory,
-    // showHistory: showHistory,
-    // showAllOrder: showAllOrder,
-    // getOrderDetail: getOrderDetail,
-    // getOrderList: getOrderList,
+    showAllOrder: showAllOrder,
+    getOrderDetail: getOrderDetail,
+    getOrderList: getOrderList,
 }
-
-
-
-// async function showAllOrder(customerID) {
-//     try {
-//         let pool = await sql.connect(config);
-//         let orders = await pool.request()
-//             .input('MaKH', sql.Int, customerID)
-//             .query("Select convert(varchar(10), NgayLap, 105) AS NgayLap,"
-//                 + " MaHD, DiaChiNhanHang, TongTien, MaKH, MaNV, TinhTrang"
-//                 + " from hoadon where makh=@MaKH");
-//             if(orders.recordset.length == 0) return null;
-//         return orders.recordset;
-//     }
-//     catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// async function addShoppingHistory(customerID, productID) {
-//     try {
-//         let pool = await sql.connect(config);
-//         let orderDetail = await pool.request()
-//             .input('MaKH', sql.Int, customerID)
-//             .input('MaSP', sql.Int, productID)
-//             .query("insert into LS_MUAHANG(MaKH,MaSP) values(@MaKH,@MaSP)");
-//         return 1;
-//     }
-//     catch (error) {
-//         console.log(error);
-//         return 0;
-//     }
-// }
-
-// async function showHistory(customerID) {
-//     try {
-//         let pool = await sql.connect(config);
-//         let history = await pool.request()
-//             .input('input_parameter', sql.Int, customerID)
-//             .query("SELECT S.MaSP, TenSP, GiaBan from LS_MUAHANG LS, SANPHAM S where MAKH = @input_parameter AND LS.MaSP=S.MaSP");
-//         return history.recordset;
-//     }
-//     catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// async function getOrderList(orderID){
-//     try {
-//         let pool = await sql.connect(config);
-//         let detail = await pool.request()
-//             .input('input_parameter', sql.Int, orderID)
-//             .query("SELECT h.MaHD, ct.MaSP, TenSP, ct.GiaBan, GiaGiam, SoLuong, ThanhTien"
-//                 + " FROM HOADON h, CT_HOADON ct, SANPHAM s"
-//                 + " WHERE h.MAHD = ct.MAHD AND h.MaHD=@input_parameter AND ct.MaSP=s.MaSP");
-//             if(detail.recordset.length==0) return null;
-//         return detail.recordset;
-//     }
-//     catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// async function getOrderDetail(orderID){
-//     try {
-//         let pool = await sql.connect(config);
-//         let detail = await pool.request()
-//             .input('input_parameter', sql.Int, orderID)
-//             .query("SELECT h.MaHD, convert(varchar(10), NgayLap, 105) AS NgayLap, DiaChiNhanHang, TongTien, TenNV, TinhTrang"
-//                 + " FROM HOADON h LEFT JOIN NHANVIEN n ON h.MaNV=n.MaNV"
-//                 + " WHERE h.MaHD=@input_parameter");
-//             if(detail.recordset.length==0) return null;
-//         return detail.recordset;
-//     }
-//     catch (error) {
-//         console.log(error);
-//     }
-// }
-
